@@ -10,7 +10,7 @@ for (const m of css.matchAll(/:root(?:\[data-theme="([^"]+)"\])?[^{]*\{([^}]*)\}
 // paleta.ts (usada al arrastrar el sol) debe coincidir con tokens.css
 const ts = readFileSync(new URL('../src/paleta.ts', import.meta.url), 'utf8')
 let difs = 0
-for (const m of ts.matchAll(/^\s{2}(\w+):\s*\{([^}]*)\}/gm)) {
+for (const m of ts.matchAll(/^\s{2}'?([\w-]+)'?:\s*\{([^}]*)\}/gm)) {
   const css = temas[m[1]]
   if (!css) continue
   for (const v of m[2].matchAll(/'([\w-]+)':\s*'(#[0-9A-Fa-f]{6})'/g)) {

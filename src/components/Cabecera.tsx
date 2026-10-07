@@ -44,14 +44,14 @@ export function Cabecera() {
       {/* Desktop: navegación lateral */}
       <nav className="secciones" aria-label="Secciones">
         {SECCIONES.map((s) => (
-          <NavLink key={s.ruta} to={s.ruta} end className="t-nav">{s.nombre}</NavLink>
+          <NavLink key={s.ruta} to={s.ruta} end className="t-nav"><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
         ))}
       </nav>
 
       {/* Móvil y tablet: menú a pantalla completa */}
       <nav id="menu" className="menu" aria-label="Menú" hidden={!abierto}>
         {SECCIONES.map((s, i) => (
-          <NavLink key={s.ruta} to={s.ruta} end className="menu__enlace" ref={i === 0 ? primero : undefined}>{s.nombre}</NavLink>
+          <NavLink key={s.ruta} to={s.ruta} end className="menu__enlace" ref={i === 0 ? primero : undefined}><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
         ))}
       </nav>
     </>

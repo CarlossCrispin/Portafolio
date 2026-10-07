@@ -4,7 +4,7 @@
 .sel { position: fixed; left: 16px; bottom: 76px; width: 48px; height: 48px; z-index: 10; }
 
 .sel__pista {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 368px;
+  position: absolute; left: 0; right: 0; bottom: 0;
   border-radius: 24px; background: var(--line);
   opacity: 0; transform: scaleY(0.2); transform-origin: bottom; pointer-events: none;
   transition: opacity var(--dur-media) var(--ease), transform var(--dur-media) var(--ease),

@@ -3,11 +3,12 @@ import { Route, Routes, useLocation } from 'react-router'
 import { Rejilla, BotonRejilla, useRejilla } from './components/Rejilla'
 import { SelectorTema } from './components/SelectorTema'
 import { Cabecera } from './components/Cabecera'
+import { CursorIsotipo } from './components/CursorIsotipo'
 import { TemaContext } from './tema-context'
 import { aplicarTema, temaInicial, type Tema } from './theme'
 import Inicio from './pages/Inicio'
 import EnConstruccion from './pages/EnConstruccion'
-import Pruebas from './pages/Pruebas'
+import Tokens from './pages/Tokens'
 
 const TITULOS: Record<string, string> = {
   '/': 'Carlos Crispín · UX/UI',
@@ -16,6 +17,7 @@ const TITULOS: Record<string, string> = {
   '/laboratorio': 'Laboratorio · Carlos Crispín',
   '/por-que': 'Por qué · Carlos Crispín',
   '/contacto': 'Contacto · Carlos Crispín',
+  '/tokens': 'Tokens · fase 1',
 }
 
 export default function App() {
@@ -34,6 +36,7 @@ export default function App() {
       <a className="saltar" href="#contenido">Saltar al contenido</a>
       <Rejilla activa={rej.activa} />
       <Cabecera />
+      <CursorIsotipo />
       <SelectorTema tema={tema} onTema={setTema} />
       <BotonRejilla activa={rej.activa} onToggle={rej.toggle} />
       <main id="contenido" className="pagina">
@@ -44,7 +47,7 @@ export default function App() {
           <Route path="/laboratorio" element={<EnConstruccion titulo="Laboratorio" />} />
           <Route path="/por-que" element={<EnConstruccion titulo="Por qué" />} />
           <Route path="/contacto" element={<EnConstruccion titulo="Contacto" />} />
-          <Route path="/pruebas" element={<Pruebas />} />
+          <Route path="/tokens" element={<Tokens />} />
           <Route path="*" element={<EnConstruccion titulo="No encontrado" />} />
         </Routes>
       </main>

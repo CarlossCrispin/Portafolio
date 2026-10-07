@@ -52,6 +52,16 @@
   --accent-text: #BEF264;
 }
 
+:root[data-theme="zinc"] {
+  --bg: #27272A;
+  --fg: #FAFAFA;
+  --muted: #A1A1AA;
+  --line: #3F3F46;
+  --accent-fill: #BEF264;
+  --on-accent: #27272A;
+  --accent-text: #BEF264;
+}
+
 :root[data-theme="contraste-alto"] {
   --bg: #FFFFFF;
   --fg: #000000;
@@ -68,4 +78,5 @@
 :root[data-theme="durazno"],
 :root[data-theme="contraste-alto"] { color-scheme: light; }
 :root[data-theme="ciruela"],
-:root[data-theme="oscuro"] { color-scheme: dark; }
+:root[data-theme="oscuro"],
+:root[data-theme="zinc"] { color-scheme: dark; }

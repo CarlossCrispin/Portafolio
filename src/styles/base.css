@@ -38,7 +38,7 @@
 .saltar:focus { transform: translateY(0); }
 
 /* Transición suave de color al cambiar de tema */
-body, .btn-rejilla {
+body {
   transition: background-color var(--dur-media) var(--ease), color var(--dur-media) var(--ease), border-color var(--dur-media) var(--ease);
 }
 

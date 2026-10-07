@@ -5,6 +5,7 @@
 @import "./styles/base.css";
 @import "./styles/selector.css";
 @import "./styles/pagina.css";
+@import "./styles/cursor.css";
 
 /* Nombres semánticos para Tailwind v4: bg-bg, text-fg, text-muted, border-line,
    bg-accent, text-on-accent, text-accent. Apuntan a las variables del tema. */

@@ -8,7 +8,7 @@ export function Rejilla({ activa }: { activa: boolean }) {
       <div className="rejilla__filas" />
       <div className="rejilla__cols">
         {Array.from({ length: COLUMNAS_MAX }, (_, i) => (
-          <div key={i} className="rejilla__col" data-i={i} />
+          <div key={i} className="rejilla__col" style={{ '--i': i } as React.CSSProperties} />
         ))}
       </div>
     </div>

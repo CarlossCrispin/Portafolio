@@ -3,16 +3,22 @@ import { TEMAS, aplicarTema, type Tema } from '../theme'
 import { ETIQUETAS, PALETA, TOKENS_COLOR, mezclar } from '../paleta'
 
 const SLOT = 48 // alto del botón
-const PASO = 80 // distancia entre paradas
-const ALTO = PASO * 4 // recorrido del sol entre Claro (arriba) y Oscuro (abajo)
+const N = TEMAS.length // 7 modos
+const ULT = N - 1
+const PASO = 56 // distancia entre paradas
+const ALTO = PASO * ULT // recorrido del sol entre Claro (arriba) y Zinc (abajo)
 
 const sinMovimiento = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const limitar = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n))
 
+function quitarArrastre() {
+  delete document.documentElement.dataset.arrastrando
+}
+
 function limpiarMezcla() {
   const r = document.documentElement
   TOKENS_COLOR.forEach((k) => r.style.removeProperty('--' + k))
-  delete r.dataset.arrastrando
+  quitarArrastre()
 }
 
 /** Mezcla continua entre dos temas vecinos. Con movimiento reducido salta a la parada más cercana. */
@@ -24,27 +30,33 @@ function aplicarMezcla(p: number) {
     aplicarTema(TEMAS[Math.round(p)])
     return
   }
-  const i = Math.min(3, Math.floor(p))
+  const i = Math.min(ULT - 1, Math.floor(p))
   const t = p - i
   TOKENS_COLOR.forEach((k) => r.style.setProperty('--' + k, mezclar(PALETA[TEMAS[i]][k], PALETA[TEMAS[i + 1]][k], t)))
   aplicarTema(TEMAS[Math.round(p)])
 }
 
 export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) => void }) {
-  const idx = Math.max(0, (TEMAS as readonly string[]).indexOf(tema)) // alto contraste: se muestra en la posición Claro
+  const idx = Math.max(0, (TEMAS as readonly string[]).indexOf(tema))
   const [abierto, setAbierto] = useState(false)
-  const [pos, setPos] = useState<number | null>(null)
+  const [pos, setPos] = useState<number | null>(null) // posición mientras se arrastra
+  const [libre, setLibre] = useState<number | null>(null) // posición intermedia que queda al soltar
   const raiz = useRef<HTMLDivElement>(null)
   const arrastre = useRef<{ y0: number; movio: boolean } | null>(null)
   const posRef = useRef(0)
   const suprimirClic = useRef(false)
   const tipo = useRef<string>('mouse')
 
-  const actual = pos ?? idx
+  const actual = pos ?? libre ?? idx
   // Las paradas y puntos se posicionan dentro de la pista (origen = su borde superior)
   const y = abierto ? actual * PASO - ALTO : 0
   const nombre = ETIQUETAS[TEMAS[idx]]
   const etiquetaActual = tema === 'contraste-alto' ? 'Alto contraste' : nombre
+
+  // Si el tema cambia desde fuera (otro control), se descarta la mezcla libre
+  useEffect(() => {
+    if (libre !== null && TEMAS[Math.round(libre)] !== tema) { setLibre(null); limpiarMezcla() }
+  }, [tema, libre])
 
   // Cerrar con Escape o al tocar fuera
   useEffect(() => {
@@ -56,7 +68,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
     return () => { document.removeEventListener('pointerdown', fuera); document.removeEventListener('keydown', esc) }
   }, [abierto])
 
-  const ir = (i: number) => onTema(TEMAS[limitar(i, 0, 4)])
+  const ir = (i: number) => { setLibre(null); limpiarMezcla(); onTema(TEMAS[limitar(i, 0, ULT)]) }
 
   function alBajar(e: React.PointerEvent) {
     tipo.current = e.pointerType
@@ -70,7 +82,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
     if (Math.abs(e.clientY - a.y0) > 3) a.movio = true
     if (!a.movio || !raiz.current) return
     const centroClaro = raiz.current.getBoundingClientRect().top - ALTO + SLOT / 2
-    const p = limitar((e.clientY - centroClaro) / PASO, 0, 4)
+    const p = limitar((e.clientY - centroClaro) / PASO, 0, ULT)
     posRef.current = p
     setPos(p)
     aplicarMezcla(p)
@@ -82,7 +94,15 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
     suprimirClic.current = true
     const i = Math.round(posRef.current)
     setPos(null)
-    limpiarMezcla()
+    if (sinMovimiento()) {
+      // Movimiento reducido: siempre termina en una parada
+      setLibre(null)
+      limpiarMezcla()
+    } else {
+      // El sol y los colores se quedan donde se soltó (mezcla continua)
+      setLibre(posRef.current)
+      quitarArrastre()
+    }
     aplicarTema(TEMAS[i])
     onTema(TEMAS[i])
   }
@@ -94,7 +114,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
   }
   function alTeclear(e: React.KeyboardEvent) {
     if (!abierto) return
-    const mapa: Record<string, number> = { ArrowUp: idx - 1, ArrowLeft: idx - 1, ArrowDown: idx + 1, ArrowRight: idx + 1, Home: 0, End: 4 }
+    const mapa: Record<string, number> = { ArrowUp: idx - 1, ArrowLeft: idx - 1, ArrowDown: idx + 1, ArrowRight: idx + 1, Home: 0, End: ULT }
     if (e.key in mapa) { e.preventDefault(); ir(mapa[e.key]) }
   }
 
@@ -104,9 +124,9 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
         'aria-label': 'Tema de color',
         'aria-orientation': 'vertical' as const,
         'aria-valuemin': 0,
-        'aria-valuemax': 4,
+        'aria-valuemax': ULT,
         'aria-valuenow': idx,
-        'aria-valuetext': `${etiquetaActual}, ${idx + 1} de 5`,
+        'aria-valuetext': libre !== null ? `Mezcla cercana a ${etiquetaActual}` : `${etiquetaActual}, ${idx + 1} de ${N}`,
       }
     : { role: 'button' as const, 'aria-label': `Elegir tema de color. Actual: ${etiquetaActual}`, 'aria-expanded': false }
 
@@ -119,11 +139,11 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
       onPointerEnter={(e) => { if (e.pointerType === 'mouse') { tipo.current = 'mouse'; setAbierto(true) } }}
       onPointerLeave={(e) => { if (e.pointerType === 'mouse' && !arrastre.current) setAbierto(false) }}
     >
-      <div className="sel__pista" aria-hidden={!abierto ? true : undefined}>
-        {Array.from({ length: 4 }, (_, i) =>
-          [1, 2, 3].map((n) => (
+      <div className="sel__pista" aria-hidden={!abierto ? true : undefined} style={{ height: ALTO + SLOT }}>
+        {Array.from({ length: ULT }, (_, i) =>
+          [1, 2].map((n) => (
             <span key={`${i}-${n}`} className="sel__punto" aria-hidden="true"
-              style={{ top: (i + n / 4) * PASO + SLOT / 2 - 2 }} />
+              style={{ top: (i + n / 3) * PASO + SLOT / 2 - 2 }} />
           )),
         )}
         {TEMAS.map((t, i) => (
@@ -135,7 +155,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
             aria-label={`Tema ${ETIQUETAS[t]}`}
             aria-pressed={tema === t}
             style={{ top: i * PASO + SLOT / 2 - 22 }}
-            onClick={() => onTema(t)}
+            onClick={() => ir(i)}
           >
             <span />
           </button>

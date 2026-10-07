@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AUDIENCIAS, type Parte } from '../content/inicio'
 
 function Texto({ partes }: { partes: Parte[] }) {
@@ -15,6 +15,9 @@ function Texto({ partes }: { partes: Parte[] }) {
 export function Pestanas() {
   const [activa, setActiva] = useState(0)
   const refs = useRef<(HTMLButtonElement | null)[]>([])
+  // El primer titular aparece sin animación; los siguientes entran al cambiar de pestaña
+  const primera = useRef(true)
+  useEffect(() => { primera.current = false }, [])
 
   function ir(i: number) {
     const n = (i + AUDIENCIAS.length) % AUDIENCIAS.length
@@ -49,8 +52,8 @@ export function Pestanas() {
           ))}
         </div>
       </div>
-      <div className="titular" role="tabpanel" id="panel-audiencia" aria-labelledby={`tab-${a.id}`} tabIndex={0}>
-        <p className="t-display"><Texto partes={a.texto} /></p>
+      <div className="titular" role="tabpanel" id="panel-audiencia" aria-labelledby={`tab-${a.id}`} aria-live="polite" tabIndex={0}>
+        <p key={a.id} className={primera.current ? 't-display' : 't-display titular--entra'}><Texto partes={a.texto} /></p>
       </div>
     </>
   )

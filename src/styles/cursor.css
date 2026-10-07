@@ -1,0 +1,18 @@
+/* Cursor con isotipo · solo mouse, solo sobre elementos interactivos.
+   Blanco con mix-blend-mode: difference → se ve oscuro sobre fondo/texto claro y claro sobre oscuro. */
+
+.cursor-iso {
+  position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none;
+  color: #fff; mix-blend-mode: difference;
+  opacity: 0; transition: opacity var(--dur-rapida) var(--ease);
+  will-change: transform;
+}
+.cursor-iso svg { display: block; width: 22px; height: auto; transform: translate(-50%, -50%) scale(0.5); transition: transform var(--dur-rapida) var(--ease); }
+.cursor-iso[data-estado="enlace"], .cursor-iso[data-estado="presion"] { opacity: 1; }
+.cursor-iso[data-estado="enlace"] svg  { transform: translate(-50%, -50%) scale(1.55); } /* 22 → ~34 px */
+.cursor-iso[data-estado="presion"] svg { transform: translate(-50%, -50%) scale(1.25); }
+
+/* La flecha desaparece solo sobre lo interactivo y solo en modo mouse */
+html[data-cursor-iso] :is(a, button, [role="tab"], [role="slider"], [role="button"], select, summary, input) { cursor: none !important; }
+
+@media (pointer: coarse), (forced-colors: active) { .cursor-iso { display: none; } }

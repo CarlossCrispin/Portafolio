@@ -4,18 +4,17 @@
    Móvil 3 col (margen 24, calle 16) · tablet 6 col (40/16) · desktop 12 col (64/24).
    Oculta por defecto; el botón la muestra, muy sutil (14 %), por debajo del contenido. */
 
-:root { --cols: 3; --m: 24px; --g: 16px; --cab: 72px; }
+:root { --dur-grid: 1500ms; --cols: 3; --m: 24px; --g: 16px; --cab: 72px; }
 @media (min-width: 768px)  { :root { --cols: 6;  --m: 40px; --g: 16px; --cab: 80px; } }
 @media (min-width: 1440px) { :root { --cols: 12; --m: 64px; --g: 24px; --cab: 88px; } }
 
 .rejilla {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   container-type: inline-size;
-  opacity: 0; /* oculta por defecto; el botón la muestra */
+  opacity: 0.14; /* muy sutil; las líneas están recogidas hasta que se activa */
   --tono: var(--muted);
   --pitch: calc((100cqw - 2 * var(--m) - (var(--cols) - 1) * var(--g)) / var(--cols));
 }
-.rejilla[data-activa="true"] { opacity: 0.14; }
 
 
 .rejilla__cols {
@@ -31,7 +30,17 @@
 .rejilla__col::before,
 .rejilla__col::after {
   content: ""; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--tono);
+  transform: scaleY(0); transform-origin: top; /* recogidas */
+  /* Al ocultar: suben, en orden inverso */
+  transition: transform calc(var(--dur-grid) * 0.6) var(--ease) calc((11 - var(--i)) * 40ms);
 }
+/* Al mostrar: las líneas caen de arriba hacia abajo, escalonadas por columna */
+.rejilla[data-activa="true"] .rejilla__col::before,
+.rejilla[data-activa="true"] .rejilla__col::after {
+  transform: scaleY(1);
+  transition: transform var(--dur-grid) var(--ease) calc(var(--i) * 110ms);
+}
+.rejilla[data-activa="true"] .rejilla__col::after { transition-delay: calc(var(--i) * 110ms + 200ms); }
 .rejilla__col::before { left: 0; }
 .rejilla__col::after  { right: 0; opacity: 0.6; }
 
@@ -40,6 +49,17 @@
   background: repeating-linear-gradient(to right, var(--tono) 0 8px, transparent 8px 16px);
   -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0 1px, transparent 1px var(--pitch));
           mask-image: repeating-linear-gradient(to bottom, #000 0 1px, transparent 1px var(--pitch));
+  /* Recogidas contra el borde derecho; al mostrar se dibujan de derecha a izquierda */
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path calc(var(--dur-grid) * 0.7) var(--ease);
+}
+.rejilla[data-activa="true"] .rejilla__filas {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path calc(var(--dur-grid) * 1.4) var(--ease) 400ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rejilla *, .rejilla *::before, .rejilla *::after { transition-delay: 0s !important; }
 }
 
 /* El contenido siempre por encima de la rejilla */
@@ -53,4 +73,9 @@
   background: var(--bg); color: var(--fg); border: 1px solid var(--line);
 }
 .btn-rejilla[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn-rejilla { transition: transform var(--dur-rapida) var(--ease), background-color var(--dur-rapida) var(--ease), color var(--dur-rapida) var(--ease), border-color var(--dur-rapida) var(--ease); }
+/* Hover: solo cambio visual del botón (no toca la rejilla) */
+.btn-rejilla:hover { transform: scale(1.08); background: var(--line); border-color: var(--muted); }
+.btn-rejilla[aria-pressed="true"]:hover { background: var(--fg); border-color: var(--fg); opacity: 0.85; }
+.btn-rejilla:active { transform: scale(0.95); }
 .btn-rejilla:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
