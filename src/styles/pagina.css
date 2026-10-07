@@ -1,0 +1,76 @@
+/* Layout del Inicio · medidas de Figma (frames v2 Inicio).
+   Móvil 390: cabecera 72, pestañas a y=84, titular a y=180.
+   Tablet 768: cabecera 80, pestañas y=92, titular y=188.
+   Desktop 1440: cabecera 88, pestañas y=96 y titular y=248, ambos desde la columna 5; navegación lateral a la izquierda. */
+
+.pagina { position: relative; z-index: 1; min-height: 100svh; padding: var(--cab) var(--m) 120px; }
+
+.solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
+
+/* Cabecera fija (isotipo + menú) */
+.cab {
+  position: fixed; inset: 0 0 auto 0; height: var(--cab); z-index: 6; padding-inline: var(--m);
+  display: flex; align-items: center; justify-content: space-between; pointer-events: none;
+}
+.cab > * { pointer-events: auto; }
+.cab__logo { display: flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; }
+.cab__nombre { font-weight: 600; letter-spacing: 0.06em; }
+.cab__menu {
+  width: 48px; height: 48px; margin-right: -12px; padding: 0; border: 0; border-radius: 9999px; background: none;
+  color: var(--fg); display: grid; place-items: center; cursor: pointer;
+}
+
+/* Menú móvil/tablet a pantalla completa */
+.menu { position: fixed; inset: 0; z-index: 5; background: var(--bg); padding: calc(var(--cab) + 40px) var(--m) 120px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.menu[hidden] { display: none; }
+.menu__enlace { font-weight: 600; font-size: 44px; line-height: 50px; letter-spacing: -0.02em; color: var(--muted); text-decoration: none; }
+.menu__enlace[aria-current="page"], .menu__enlace:hover { color: var(--fg); }
+
+/* Navegación lateral (solo desktop) */
+.secciones { display: none; }
+
+/* Inicio */
+.inicio { display: grid; grid-template-columns: repeat(var(--cols), 1fr); column-gap: var(--g); }
+
+.tabs { grid-column: 1 / -1; position: relative; margin-top: 12px; margin-inline: calc(-1 * var(--m)); }
+.tabs__lista { display: flex; gap: 8px; padding-inline: var(--m); overflow-x: auto; scrollbar-width: none; }
+.tabs__lista::-webkit-scrollbar { display: none; }
+/* Degradado que sugiere más pestañas a la derecha */
+.tabs::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 72px; pointer-events: none; background: linear-gradient(to right, transparent, var(--bg)); }
+
+.tab {
+  flex: none; height: 40px; padding: 10px 16px; border: 0; border-radius: 9999px; cursor: pointer;
+  background: transparent; color: var(--muted); white-space: nowrap;
+  transition: background-color var(--dur-rapida) var(--ease), color var(--dur-rapida) var(--ease);
+}
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+
+.titular { grid-column: 1 / -1; margin-top: 56px; color: var(--fg); }
+.titular:focus-visible { outline-offset: 8px; }
+.codigo { font-family: var(--font-mono); font-weight: 500; letter-spacing: -0.04em; }
+.titular-pagina { grid-column: 1 / -1; margin-top: 56px; color: var(--fg); }
+.texto-pagina { grid-column: 1 / -1; margin-top: 16px; color: var(--muted); }
+
+@media (min-width: 768px) {
+  .cab__nombre { display: none; } /* el nombre solo acompaña al isotipo en móvil */
+  .tabs { margin-top: 12px; }
+  .titular, .titular-pagina { margin-top: 56px; }
+}
+
+@media (min-width: 1440px) {
+  .cab__menu, .menu { display: none !important; }
+  .secciones {
+    display: flex; flex-direction: column; gap: 6px; position: fixed; z-index: 6;
+    left: var(--m); top: 254px;
+  }
+  .secciones a { color: var(--muted); text-decoration: none; }
+  .secciones a:hover, .secciones a[aria-current="page"] { color: var(--fg); }
+
+  .tabs { grid-column: 5 / -1; margin-top: 8px; margin-inline: 0; }
+  .tabs__lista { gap: 4px; padding-inline: 0; overflow: visible; }
+  .tabs::after { display: none; }
+  .tab { padding-inline: 14px; }
+  .titular, .titular-pagina, .texto-pagina { grid-column: 5 / -1; }
+  .titular, .titular-pagina { margin-top: 112px; }
+}

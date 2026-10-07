@@ -4,8 +4,11 @@
    Móvil 3 col (margen 24, calle 16) · tablet 6 col (40/16) · desktop 12 col (64/24).
    Oculta por defecto; el botón la muestra, muy sutil (14 %), por debajo del contenido. */
 
+:root { --cols: 3; --m: 24px; --g: 16px; --cab: 72px; }
+@media (min-width: 768px)  { :root { --cols: 6;  --m: 40px; --g: 16px; --cab: 80px; } }
+@media (min-width: 1440px) { :root { --cols: 12; --m: 64px; --g: 24px; --cab: 88px; } }
+
 .rejilla {
-  --cols: 3; --m: 24px; --g: 16px;
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   container-type: inline-size;
   opacity: 0; /* oculta por defecto; el botón la muestra */
@@ -14,8 +17,6 @@
 }
 .rejilla[data-activa="true"] { opacity: 0.14; }
 
-@media (min-width: 768px)  { .rejilla { --cols: 6;  --m: 40px; --g: 16px; } }
-@media (min-width: 1440px) { .rejilla { --cols: 12; --m: 64px; --g: 24px; } }
 
 .rejilla__cols {
   position: absolute; inset: 0;
