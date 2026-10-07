@@ -1,1 +1,17 @@
 @import "tailwindcss";
+@import "./styles/tokens.css";
+
+/* Nombres semánticos para Tailwind v4: bg-bg, text-fg, text-muted, border-line,
+   bg-accent, text-on-accent, text-accent. Apuntan a las variables del tema. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent-fill);
+  --color-on-accent: var(--on-accent);
+  --color-accent-text: var(--accent-text);
+}
+
+html { background: var(--bg); color: var(--fg); }
+body { margin: 0; background: var(--bg); color: var(--fg); }

@@ -1,0 +1,71 @@
+/* Tokens de color · 6 modos (fuente: Figma "Color · 6 modos").
+   Cambian solo con [data-theme] en <html>. Contraste de texto verificado >= 4.5:1 (AA). */
+
+:root,
+:root[data-theme="claro"] {
+  --bg: #FDFDFD;
+  --fg: #0A0A0A;
+  --muted: #55555C;
+  --line: #D9D9DE;
+  --accent-fill: #BEF264;
+  --on-accent: #0A0A0A;
+  --accent-text: #3F6212;
+}
+
+:root[data-theme="salvia"] {
+  --bg: #C8D3C1;
+  --fg: #232B1F;
+  --muted: #46513F;
+  --line: #9DAE92;
+  --accent-fill: #BEF264;
+  --on-accent: #232B1F;
+  --accent-text: #2F4A0C;
+}
+
+:root[data-theme="durazno"] {
+  --bg: #FECBA8;
+  --fg: #A82C00;
+  --muted: #7A3A1A;
+  --line: #E3A67F;
+  --accent-fill: #BEF264;
+  --on-accent: #272728;
+  --accent-text: #A82C00;
+}
+
+:root[data-theme="ciruela"] {
+  --bg: #4A2146;
+  --fg: #F6C6E0;
+  --muted: #D9A8CC;
+  --line: #7A4C75;
+  --accent-fill: #BEF264;
+  --on-accent: #272728;
+  --accent-text: #BEF264;
+}
+
+:root[data-theme="oscuro"] {
+  --bg: #26293D;
+  --fg: #C8B4E8;
+  --muted: #A99BCB;
+  --line: #474B6B;
+  --accent-fill: #BEF264;
+  --on-accent: #26293D;
+  --accent-text: #BEF264;
+}
+
+:root[data-theme="contraste-alto"] {
+  --bg: #FFFFFF;
+  --fg: #000000;
+  --muted: #3F3F46;
+  --line: #52525B;
+  --accent-fill: #BEF264;
+  --on-accent: #272728;
+  --accent-text: #14532D;
+}
+
+/* Color nativo del navegador (scrollbars, formularios) acorde al tema */
+:root[data-theme="claro"],
+:root[data-theme="salvia"],
+:root[data-theme="durazno"],
+:root[data-theme="contraste-alto"] { color-scheme: light; }
+:root[data-theme="ciruela"],
+:root[data-theme="oscuro"] { color-scheme: dark; }
