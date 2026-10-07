@@ -1,0 +1,32 @@
+/* Tipografía · fuente: Figma (frames Inicio v2). Archivo (titulares/UI) + JetBrains Mono (etiquetas/código).
+   Fuentes autoalojadas con @fontsource-variable (se importan en main.tsx). */
+
+@theme {
+  --font-sans: "Archivo Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+@layer base {
+  html { font-family: var(--font-sans); font-size: 16px; line-height: 24px; -webkit-font-smoothing: antialiased; }
+}
+
+@layer components {
+  /* Titular: SemiBold, tracking -2 %. 32/36 móvil · 52/58 tablet · 56/62 desktop */
+  .t-display { font-weight: 600; font-size: 32px; line-height: 36px; letter-spacing: -0.02em; }
+  /* Pestañas de audiencia: Medium 15/20 móvil y tablet · 14/20 desktop */
+  .t-tab { font-weight: 500; font-size: 15px; line-height: 20px; }
+  /* Navegación lateral (solo desktop): Medium 20/28 */
+  .t-nav { font-weight: 500; font-size: 20px; line-height: 28px; }
+  /* Cuerpo */
+  .t-body { font-weight: 400; font-size: 16px; line-height: 24px; }
+  /* Etiqueta: JetBrains Mono 12/14 */
+  .t-label { font-family: var(--font-mono); font-weight: 400; font-size: 12px; line-height: 14px; }
+
+  @media (min-width: 768px) {
+    .t-display { font-size: 52px; line-height: 58px; }
+  }
+  @media (min-width: 1440px) {
+    .t-display { font-size: 56px; line-height: 62px; }
+    .t-tab { font-size: 14px; }
+  }
+}

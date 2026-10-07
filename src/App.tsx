@@ -33,6 +33,13 @@ export default function App() {
         ))}
       </ul>
       <p className="mt-6 text-accent-text">Texto de acento (accent-text)</p>
+      <section className="mt-8 grid gap-4">
+        <p className="t-label text-muted">t-label · JetBrains Mono 12/14</p>
+        <h2 className="t-display text-fg">Transformo datos y problemas complejos en colores, formas y experiencias humanas.</h2>
+        <p className="t-tab text-muted">t-tab · Para cualquiera · Reclutadores · Líderes de producto</p>
+        <p className="t-nav text-fg">t-nav · Inicio Trabajo Camino</p>
+        <p className="t-body text-fg">t-body · Texto de párrafo para casos y secciones, con lectura cómoda a 16/24.</p>
+      </section>
     </main>
   )
 }
