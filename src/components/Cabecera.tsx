@@ -4,6 +4,7 @@ import { Isotipo } from './Isotipo'
 import { secciones } from '../content/secciones'
 import { useIdioma, useUI } from '../i18n'
 import { SelectorIdioma } from './SelectorIdioma'
+import { CLAVE as CLAVE_SPLASH } from './Splash'
 
 /** Cabecera fija: isotipo + menú (móvil y tablet). En desktop, navegación lateral fija. */
 export function Cabecera() {
@@ -14,6 +15,14 @@ export function Cabecera() {
   const { pathname } = useLocation()
   const boton = useRef<HTMLButtonElement>(null)
   const primero = useRef<HTMLAnchorElement>(null)
+
+  // Estando en Inicio, tocar el logo reinicia la visita: olvida que el splash ya se vio y recarga la página
+  function alLogo(e: React.MouseEvent) {
+    if (pathname !== '/') return
+    e.preventDefault()
+    try { sessionStorage.removeItem(CLAVE_SPLASH) } catch { /* sin almacenamiento: se recarga igual */ }
+    window.location.reload()
+  }
 
   useEffect(() => setAbierto(false), [pathname])
   useEffect(() => { if (abierto) primero.current?.focus() }, [abierto])
@@ -27,7 +36,7 @@ export function Cabecera() {
   return (
     <>
       <header className="cab">
-        <Link to="/" className="cab__logo" aria-label={t.logoAria}>
+        <Link to="/" className="cab__logo" aria-label={t.logoAria} onClick={alLogo}>
           <Isotipo />
           <span className="cab__nombre t-label" aria-hidden="true">CARLOS CRISPIN</span>
         </Link>

@@ -57,7 +57,11 @@ export function Pestanas() {
         </div>
       </div>
       <div className="titular reveal rv2" role="tabpanel" id="panel-audiencia" aria-labelledby={`tab-${a.id}`} aria-live="polite" tabIndex={0}>
-        <p key={a.id} className={primera.current ? 't-display' : 't-display titular--entra'}><Texto partes={a.texto} /></p>
+        {/* Jerarquía: la primera frase es el titular; el resto, un párrafo de apoyo más pequeño y ligero */}
+        <div key={a.id} className={primera.current ? undefined : 'titular--entra'}>
+          <p className="t-display titular__principal"><Texto partes={a.texto.slice(0, 1)} /></p>
+          {a.texto.length > 1 && <p className="titular__apoyo"><Texto partes={a.texto.slice(1)} /></p>}
+        </div>
       </div>
     </>
   )

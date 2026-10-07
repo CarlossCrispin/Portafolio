@@ -6,7 +6,7 @@ import { useIdioma } from '../i18n'
 /* Splash (~2.5 s, una vez por sesión de navegación): el isotipo + nombre entran enormes (recortados y tenues),
    se reducen hasta el centro, aparece la frase y todo viaja hasta la posición exacta del logo de la cabecera. */
 
-const CLAVE = 'splash-visto'
+export const CLAVE = 'splash-visto'
 const DURACION = 2500
 // Para revisarlo siempre: abrir con /?splash (ignora que ya se haya visto en la sesión)
 const forzado = () => new URLSearchParams(window.location.search).has('splash')

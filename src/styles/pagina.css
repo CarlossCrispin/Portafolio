@@ -103,3 +103,12 @@
 }
 .idioma__op:hover { color: var(--fg); }
 .idioma__op[aria-pressed="true"] { color: var(--fg); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1.5px; }
+
+/* Inicio · jerarquía del texto de cada pestaña: titular Medium + párrafo de apoyo Regular en gris */
+.titular__principal { margin: 0; font-weight: 500; }
+.titular__apoyo {
+  margin: 24px 0 0; max-width: 34em; color: var(--muted); font-weight: 400;
+  font-size: 18px; line-height: 26px; letter-spacing: -0.005em;
+}
+@media (min-width: 768px) { .titular__apoyo { margin-top: 32px; font-size: 22px; line-height: 32px; } }
+@media (min-width: 1440px) { .titular__apoyo { font-size: 24px; line-height: 34px; } }
