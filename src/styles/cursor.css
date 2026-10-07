@@ -1,18 +1,22 @@
-/* Cursor con isotipo · solo mouse, solo sobre elementos interactivos.
-   Blanco con mix-blend-mode: difference → se ve oscuro sobre fondo/texto claro y claro sobre oscuro. */
+/* Cursor de círculo · solo mouse. Blanco con mix-blend-mode: difference:
+   se ve oscuro sobre fondo/texto claro y claro sobre oscuro. 18–28 px según el ancho; ×1.6 sobre interactivos. */
 
-.cursor-iso {
+.cursor-circulo {
+  /* Responsivo: 18 px en ventanas angostas → ~23 px a 1440 → 28 px en pantallas grandes */
+  --cursor: clamp(18px, 0.9vw + 10px, 28px);
   position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none;
-  color: #fff; mix-blend-mode: difference;
-  opacity: 0; transition: opacity var(--dur-rapida) var(--ease);
+  mix-blend-mode: difference; opacity: 0; transition: opacity var(--dur-rapida) var(--ease);
   will-change: transform;
 }
-.cursor-iso svg { display: block; width: 22px; height: auto; transform: translate(-50%, -50%) scale(0.5); transition: transform var(--dur-rapida) var(--ease); }
-.cursor-iso[data-estado="enlace"], .cursor-iso[data-estado="presion"] { opacity: 1; }
-.cursor-iso[data-estado="enlace"] svg  { transform: translate(-50%, -50%) scale(1.55); } /* 22 → ~34 px */
-.cursor-iso[data-estado="presion"] svg { transform: translate(-50%, -50%) scale(1.25); }
+.cursor-circulo[data-visible="true"] { opacity: 1; }
+.cursor-circulo span {
+  display: block; width: var(--cursor); height: var(--cursor); border-radius: 9999px; background: #fff;
+  transform: translate(-50%, -50%) scale(1); transition: transform var(--dur-media) var(--ease);
+}
+.cursor-circulo[data-estado="enlace"] span  { transform: translate(-50%, -50%) scale(1.6); }   /* crece ×1.6 */
+.cursor-circulo[data-estado="presion"] span { transform: translate(-50%, -50%) scale(1.25); }
 
-/* La flecha desaparece solo sobre lo interactivo y solo en modo mouse */
-html[data-cursor-iso] :is(a, button, [role="tab"], [role="slider"], [role="button"], select, summary, input) { cursor: none !important; }
+/* La flecha del sistema se oculta en modo mouse; con teclado vuelve (el atributo se quita) */
+html[data-cursor], html[data-cursor] * { cursor: none !important; }
 
-@media (pointer: coarse), (forced-colors: active) { .cursor-iso { display: none; } }
+@media (pointer: coarse), (forced-colors: active) { .cursor-circulo { display: none; } html[data-cursor], html[data-cursor] * { cursor: auto !important; } }

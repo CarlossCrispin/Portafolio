@@ -42,7 +42,7 @@
   --accent-text: #BEF264;
 }
 
-:root[data-theme="oscuro"] {
+:root[data-theme="monokai"] {
   --bg: #26293D;
   --fg: #C8B4E8;
   --muted: #A99BCB;
@@ -52,7 +52,7 @@
   --accent-text: #BEF264;
 }
 
-:root[data-theme="zinc"] {
+:root[data-theme="oscuro"] {
   --bg: #27272A;
   --fg: #FAFAFA;
   --muted: #A1A1AA;
@@ -79,4 +79,4 @@
 :root[data-theme="contraste-alto"] { color-scheme: light; }
 :root[data-theme="ciruela"],
 :root[data-theme="oscuro"],
-:root[data-theme="zinc"] { color-scheme: dark; }
+:root[data-theme="monokai"] { color-scheme: dark; }

@@ -15,3 +15,6 @@ export const AUDIENCIAS: Audiencia[] = [
   { id: 'desarrolladores', etiqueta: 'Desarrolladores', texto: ['Soy ', { codigo: '{diseño + código}' }, '. Construyo interfaces y sistemas de diseño con React, TypeScript y Tailwind. Diseño pensando en la implementación, la accesibilidad y la consistencia.'] },
   { id: 'docencia', etiqueta: 'Docencia y comunidad', texto: ['Enseñé HTML y CSS a personas que nunca habían programado y compartí conocimientos de desarrollo web en el TecNM Tláhuac. Creo en hacer comprensible lo complejo y en una tecnología accesible para todas y todos.'] },
 ]
+
+/* Frase del splash (editable). */
+export const FRASE_SPLASH = 'Diseño soluciones digitales'

@@ -7,7 +7,7 @@ export const ETIQUETAS = {
   durazno: 'Durazno',
   ciruela: 'Ciruela',
   oscuro: 'Oscuro',
-  zinc: 'Zinc',
+  monokai: 'Monokai',
   'contraste-alto': 'Alto contraste',
 } as const
 
@@ -18,8 +18,8 @@ export const PALETA: Record<keyof typeof ETIQUETAS, Record<Token, string>> = {
   salvia:  { 'bg': '#C8D3C1', 'fg': '#232B1F', 'muted': '#46513F', 'line': '#9DAE92', 'accent-fill': '#BEF264', 'on-accent': '#232B1F', 'accent-text': '#2F4A0C' },
   durazno: { 'bg': '#FECBA8', 'fg': '#A82C00', 'muted': '#7A3A1A', 'line': '#E3A67F', 'accent-fill': '#BEF264', 'on-accent': '#272728', 'accent-text': '#A82C00' },
   ciruela: { 'bg': '#4A2146', 'fg': '#F6C6E0', 'muted': '#D9A8CC', 'line': '#7A4C75', 'accent-fill': '#BEF264', 'on-accent': '#272728', 'accent-text': '#BEF264' },
-  oscuro:  { 'bg': '#26293D', 'fg': '#C8B4E8', 'muted': '#A99BCB', 'line': '#474B6B', 'accent-fill': '#BEF264', 'on-accent': '#26293D', 'accent-text': '#BEF264' },
-  zinc:    { 'bg': '#27272A', 'fg': '#FAFAFA', 'muted': '#A1A1AA', 'line': '#3F3F46', 'accent-fill': '#BEF264', 'on-accent': '#27272A', 'accent-text': '#BEF264' },
+  monokai: { 'bg': '#26293D', 'fg': '#C8B4E8', 'muted': '#A99BCB', 'line': '#474B6B', 'accent-fill': '#BEF264', 'on-accent': '#26293D', 'accent-text': '#BEF264' },
+  oscuro:  { 'bg': '#27272A', 'fg': '#FAFAFA', 'muted': '#A1A1AA', 'line': '#3F3F46', 'accent-fill': '#BEF264', 'on-accent': '#27272A', 'accent-text': '#BEF264' },
   'contraste-alto': { 'bg': '#FFFFFF', 'fg': '#000000', 'muted': '#3F3F46', 'line': '#52525B', 'accent-fill': '#BEF264', 'on-accent': '#272728', 'accent-text': '#14532D' },
 }
 

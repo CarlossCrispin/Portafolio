@@ -19,7 +19,7 @@ export default function Tokens() {
   const paletas: [string, Record<Token, string>][] = TEMAS.map((t) => [ETIQUETAS[t], PALETA[t]])
 
   return (
-    <div className="tokens">
+    <div className="tokens reveal rv1">
       <p className="t-label text-muted">FASE 1 · BASE DE CÓDIGO</p>
       <h1 className="t-display mt-2 text-fg">Tokens, tipografía y rejilla</h1>
       <p className="t-body mt-4 text-muted">

@@ -29,7 +29,7 @@ export function Cabecera() {
         <button
           ref={boton}
           type="button"
-          className="cab__menu"
+          className="cab__menu reveal rv0"
           aria-expanded={abierto}
           aria-controls="menu"
           aria-label={abierto ? 'Cerrar menú' : 'Abrir menú'}
@@ -42,16 +42,16 @@ export function Cabecera() {
       </header>
 
       {/* Desktop: navegación lateral */}
-      <nav className="secciones" aria-label="Secciones">
+      <nav className="secciones reveal rv0" aria-label="Secciones">
         {SECCIONES.map((s) => (
-          <NavLink key={s.ruta} to={s.ruta} end className="t-nav"><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
+          <NavLink key={s.ruta} to={s.ruta} end={s.ruta === '/'} className="t-nav"><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
         ))}
       </nav>
 
       {/* Móvil y tablet: menú a pantalla completa */}
       <nav id="menu" className="menu" aria-label="Menú" hidden={!abierto}>
         {SECCIONES.map((s, i) => (
-          <NavLink key={s.ruta} to={s.ruta} end className="menu__enlace" ref={i === 0 ? primero : undefined}><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
+          <NavLink key={s.ruta} to={s.ruta} end={s.ruta === '/'} className="menu__enlace" ref={i === 0 ? primero : undefined}><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
         ))}
       </nav>
     </>

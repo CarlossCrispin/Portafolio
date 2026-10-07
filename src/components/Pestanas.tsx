@@ -32,7 +32,7 @@ export function Pestanas() {
 
   return (
     <>
-      <div className="tabs">
+      <div className="tabs reveal rv1">
         <div className="tabs__lista" role="tablist" aria-label="¿Quién eres?" onKeyDown={alTeclear}>
           {AUDIENCIAS.map((x, i) => (
             <button
@@ -52,7 +52,7 @@ export function Pestanas() {
           ))}
         </div>
       </div>
-      <div className="titular" role="tabpanel" id="panel-audiencia" aria-labelledby={`tab-${a.id}`} aria-live="polite" tabIndex={0}>
+      <div className="titular reveal rv2" role="tabpanel" id="panel-audiencia" aria-labelledby={`tab-${a.id}`} aria-live="polite" tabIndex={0}>
         <p key={a.id} className={primera.current ? 't-display' : 't-display titular--entra'}><Texto partes={a.texto} /></p>
       </div>
     </>

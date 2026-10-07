@@ -19,7 +19,7 @@ export function BotonRejilla({ activa, onToggle }: { activa: boolean; onToggle: 
   return (
     <button
       type="button"
-      className="btn-rejilla"
+      className="btn-rejilla reveal rv4"
       aria-pressed={activa}
       aria-label="Mostrar rejilla"
       onClick={onToggle}

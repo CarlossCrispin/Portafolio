@@ -1,0 +1,24 @@
+.splash { position: fixed; inset: 0; z-index: 200; cursor: default; }
+.splash__fondo { position: absolute; inset: 0; background: var(--bg); }
+.splash__logo { position: fixed; transform-origin: center; color: var(--fg); will-change: transform, opacity; }
+.splash__frase {
+  position: fixed; left: 0; right: 0; margin: 0; text-align: center; padding-inline: var(--m);
+  color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: clamp(12px, 0.5vw + 9px, 15px); line-height: 1.4;
+}
+/* Mientras dura el splash: sin scroll y el logo real de la cabecera espera oculto */
+html[data-splash] { overflow: hidden; }
+html[data-splash] .cab > .cab__logo { visibility: hidden; }
+
+/* Contenido: aparece al terminar el splash, con la misma velocidad, curva y escalonado que la rejilla.
+   Efecto: barrido de arriba hacia abajo (como caen las columnas de la rejilla). */
+html:not([data-listo]) .reveal { clip-path: inset(0 0 100% 0); }
+html[data-listo] .reveal {
+  animation: revelar var(--dur-grid) var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+.rv0 { --i: 0; } .rv1 { --i: 1; } .rv2 { --i: 2; } .rv3 { --i: 3; } .rv4 { --i: 4; }
+@keyframes revelar {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}

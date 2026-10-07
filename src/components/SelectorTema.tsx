@@ -6,7 +6,7 @@ const SLOT = 48 // alto del botón
 const N = TEMAS.length // 7 modos
 const ULT = N - 1
 const PASO = 56 // distancia entre paradas
-const ALTO = PASO * ULT // recorrido del sol entre Claro (arriba) y Zinc (abajo)
+const ALTO = PASO * ULT // recorrido del sol entre Claro (arriba) y Oscuro (abajo)
 
 const sinMovimiento = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const limitar = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n))
@@ -133,7 +133,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
   return (
     <div
       ref={raiz}
-      className="sel"
+      className="sel reveal rv3"
       data-abierto={abierto}
       data-arrastrando={pos !== null}
       onPointerEnter={(e) => { if (e.pointerType === 'mouse') { tipo.current = 'mouse'; setAbierto(true) } }}

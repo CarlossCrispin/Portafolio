@@ -75,7 +75,7 @@
   .cab__menu, .menu { display: none !important; }
   .secciones {
     display: flex; flex-direction: column; gap: 6px; position: fixed; z-index: 6;
-    left: var(--m); top: 254px;
+    left: var(--m); top: var(--nav-top, 254px);
   }
   .secciones a { color: var(--muted); text-decoration: none; }
   .secciones a:hover, .secciones a[aria-current="page"] { color: var(--fg); }

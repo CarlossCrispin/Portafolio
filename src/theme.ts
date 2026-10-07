@@ -1,5 +1,5 @@
-/** Orden de la pista, de arriba (Claro) a abajo (Zinc). */
-export const TEMAS = ['claro', 'contraste-alto', 'salvia', 'durazno', 'ciruela', 'oscuro', 'zinc'] as const
+/** Orden de la pista, de arriba (Claro) a abajo (Oscuro). */
+export const TEMAS = ['claro', 'contraste-alto', 'salvia', 'durazno', 'monokai', 'ciruela', 'oscuro'] as const
 export type Tema = (typeof TEMAS)[number]
 
 /** Tema inicial según el sistema. No se guarda nada entre visitas (decisión de Carlos). */
