@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Rejilla, BotonRejilla, useRejilla } from './components/Rejilla'
 import { TEMAS, aplicarTema, temaInicial, type Tema } from './theme'
 
 const TODOS: Tema[] = [...TEMAS, 'contraste-alto']
@@ -7,9 +8,13 @@ const TOKENS = ['bg', 'fg', 'muted', 'line', 'accent-fill', 'on-accent', 'accent
 export default function App() {
   const [tema, setTema] = useState<Tema>(temaInicial)
   useEffect(() => aplicarTema(tema), [tema])
+  const rej = useRejilla()
 
   return (
-    <main className="p-6">
+    <>
+    <Rejilla activa={rej.activa} />
+    <BotonRejilla activa={rej.activa} onToggle={rej.toggle} />
+    <main className="contenido p-6">
       <h1 className="text-2xl font-semibold text-fg">Paso 1 · tokens de color</h1>
       <p className="text-muted mt-2">Prueba temporal: cambia de tema y revisa que todo se lea.</p>
       <div className="mt-4 flex flex-wrap gap-2">
@@ -41,5 +46,6 @@ export default function App() {
         <p className="t-body text-fg">t-body · Texto de párrafo para casos y secciones, con lectura cómoda a 16/24.</p>
       </section>
     </main>
+    </>
   )
 }
