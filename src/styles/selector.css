@@ -1,0 +1,38 @@
+/* Selector de tema · pista vertical con el sol como pulgar (referencia: video + Figma 21:196).
+   Cerrado: solo el sol, sobre el botón de rejilla. Abierto: pista hacia arriba con 5 paradas, Claro arriba → Oscuro abajo. */
+
+.sel { position: fixed; left: 16px; bottom: 76px; width: 48px; height: 48px; z-index: 10; }
+
+.sel__pista {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 368px;
+  border-radius: 24px; background: var(--line);
+  opacity: 0; transform: scaleY(0.2); transform-origin: bottom; pointer-events: none;
+  transition: opacity var(--dur-media) var(--ease), transform var(--dur-media) var(--ease),
+              background-color var(--dur-media) var(--ease);
+}
+.sel[data-abierto="true"] .sel__pista { opacity: 1; transform: none; pointer-events: auto; }
+
+.sel__punto { position: absolute; left: 22px; width: 4px; height: 4px; border-radius: 9999px; background: var(--muted); opacity: 0.55; }
+
+.sel__parada {
+  position: absolute; left: 1px; width: 44px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer;
+  display: grid; place-items: center; border-radius: 9999px; visibility: hidden;
+}
+.sel[data-abierto="true"] .sel__parada { visibility: visible; }
+.sel__parada span { width: 6px; height: 6px; border-radius: 9999px; background: var(--fg); transition: opacity var(--dur-rapida) var(--ease); }
+/* El tema actual lo ocupa el sol: su punto se oculta */
+.sel__parada[aria-pressed="true"] span { opacity: 0; }
+
+.sel__sol {
+  position: absolute; left: 0; top: 0; z-index: 2; width: 48px; height: 48px; padding: 0;
+  border-radius: 9999px; background: var(--bg); color: var(--fg); border: 1px solid var(--line);
+  display: grid; place-items: center; cursor: pointer; touch-action: none;
+  transition: transform var(--dur-media) var(--ease), background-color var(--dur-media) var(--ease),
+              color var(--dur-media) var(--ease), border-color var(--dur-media) var(--ease);
+}
+/* Abierto: el sol queda solo como ícono sobre la pista (sin círculo) */
+.sel[data-abierto="true"] .sel__sol { cursor: grab; background: transparent; border-color: transparent; }
+.sel[data-arrastrando="true"] .sel__sol { cursor: grabbing; transition: none; }
+
+/* Mientras se arrastra, el color cambia sin retraso */
+html[data-arrastrando] *, html[data-arrastrando] *::before, html[data-arrastrando] *::after { transition: none !important; }

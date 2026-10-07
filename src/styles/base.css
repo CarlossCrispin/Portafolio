@@ -37,6 +37,11 @@
 }
 .saltar:focus { transform: translateY(0); }
 
+/* Transición suave de color al cambiar de tema */
+body, .btn-rejilla {
+  transition: background-color var(--dur-media) var(--ease), color var(--dur-media) var(--ease), border-color var(--dur-media) var(--ease);
+}
+
 ::selection { background: var(--accent-fill); color: var(--on-accent); }
 
 /* Modo de colores forzados de Windows: respetar los del sistema */

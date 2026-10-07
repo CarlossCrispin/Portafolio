@@ -7,6 +7,16 @@ for (const m of css.matchAll(/:root(?:\[data-theme="([^"]+)"\])?[^{]*\{([^}]*)\}
   for (const v of m[2].matchAll(/--([\w-]+):\s*(#[0-9A-Fa-f]{6})/g)) vars[v[1]] = v[2]
   if (Object.keys(vars).length >= 7) temas[m[1] ?? 'claro'] = { ...(temas[m[1] ?? 'claro'] ?? {}), ...vars }
 }
+// paleta.ts (usada al arrastrar el sol) debe coincidir con tokens.css
+const ts = readFileSync(new URL('../src/paleta.ts', import.meta.url), 'utf8')
+let difs = 0
+for (const m of ts.matchAll(/^\s{2}(\w+):\s*\{([^}]*)\}/gm)) {
+  const css = temas[m[1]]
+  if (!css) continue
+  for (const v of m[2].matchAll(/'([\w-]+)':\s*'(#[0-9A-Fa-f]{6})'/g)) {
+    if (css[v[1]]?.toUpperCase() !== v[2].toUpperCase()) { difs++; console.log(`paleta.ts ≠ tokens.css · ${m[1]} ${v[1]}: ${v[2]} vs ${css[v[1]]}`) }
+  }
+}
 const lum = (h) => {
   const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)
     .map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4))
@@ -20,4 +30,5 @@ for (const [t, v] of Object.entries(temas)) {
   console.log(t.padEnd(15), fila.join(' · '))
 }
 console.log(fallos ? `\n${fallos} par(es) bajo 4.5:1` : '\nTodos los pares de texto pasan AA (≥ 4.5:1)')
-process.exit(fallos ? 1 : 0)
+if (difs) console.log(`${difs} diferencia(s) entre paleta.ts y tokens.css`)
+process.exit(fallos || difs ? 1 : 0)

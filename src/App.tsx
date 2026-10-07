@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Rejilla, BotonRejilla, useRejilla } from './components/Rejilla'
+import { SelectorTema } from './components/SelectorTema'
 import { TEMAS, aplicarTema, temaInicial, type Tema } from './theme'
 
 const TODOS: Tema[] = [...TEMAS, 'contraste-alto']
@@ -14,6 +15,7 @@ export default function App() {
     <>
     <a className="saltar" href="#contenido">Saltar al contenido</a>
     <Rejilla activa={rej.activa} />
+    <SelectorTema tema={tema} onTema={setTema} />
     <BotonRejilla activa={rej.activa} onToggle={rej.toggle} />
     <main id="contenido" className="contenido p-6">
       <h1 className="text-2xl font-semibold text-fg">Paso 1 · tokens de color</h1>
