@@ -12,9 +12,10 @@ export default function App() {
 
   return (
     <>
+    <a className="saltar" href="#contenido">Saltar al contenido</a>
     <Rejilla activa={rej.activa} />
     <BotonRejilla activa={rej.activa} onToggle={rej.toggle} />
-    <main className="contenido p-6">
+    <main id="contenido" className="contenido p-6">
       <h1 className="text-2xl font-semibold text-fg">Paso 1 · tokens de color</h1>
       <p className="text-muted mt-2">Prueba temporal: cambia de tema y revisa que todo se lea.</p>
       <div className="mt-4 flex flex-wrap gap-2">

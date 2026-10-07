@@ -1,0 +1,45 @@
+/* Base de accesibilidad y movimiento (paso 1). */
+
+:root {
+  /* Tokens de movimiento (Figma "Movimiento · tokens") */
+  --dur-rapida: 150ms;
+  --dur-media: 250ms;
+  --dur-lenta: 400ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out */
+}
+
+/* prefers-reduced-motion: sin animaciones ni transiciones; cambios instantáneos */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-rapida: 0ms; --dur-media: 0ms; --dur-lenta: 0ms; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Foco visible en todos los controles (teclado) */
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Enlace "saltar al contenido": visible solo al enfocar con teclado */
+.saltar {
+  position: fixed; left: 16px; top: 16px; z-index: 100;
+  padding: 12px 16px; border-radius: 9999px;
+  background: var(--accent-fill); color: var(--on-accent);
+  font-weight: 500; text-decoration: none;
+  transform: translateY(-200%);
+}
+.saltar:focus { transform: translateY(0); }
+
+::selection { background: var(--accent-fill); color: var(--on-accent); }
+
+/* Modo de colores forzados de Windows: respetar los del sistema */
+@media (forced-colors: active) {
+  .btn-rejilla[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+}
