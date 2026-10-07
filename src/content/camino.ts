@@ -1,6 +1,10 @@
 /* Camino · de lo más reciente a lo más antiguo. Fuente: LinkedIn de Carlos (cargos y fechas declarados).
    Octopy es hoy BlackHole. Las fechas no verificadas se marcan "por confirmar". */
-export const CAMINO = {
+export interface Hito { fecha: string; titulo: string; texto: string; pendiente?: boolean; href?: string }
+export interface PaginaHitos { etiqueta: string; titular: string; bajada?: string; hitos: Hito[] }
+
+export const CAMINO: PaginaHitos = {
+  etiqueta: 'CAMINO',
   titular: 'De escribir código a diseñar para quien lo usa.',
   hitos: [
     {
