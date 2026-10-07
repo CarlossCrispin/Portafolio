@@ -24,7 +24,31 @@ export function Splash() {
     if (!activo) { html.setAttribute('data-listo', ''); return } // sin splash: el contenido aparece de inmediato
     const l = logo.current, f = frase.current, b = fondo.current
     const destino = document.querySelector('.cab > .cab__logo')?.getBoundingClientRect()
-    const fin = () => { html.removeAttribute('data-splash'); html.setAttribute('data-listo', ''); marcar(); setActivo(false) }
+    let borrado: number | undefined
+    const llegar = () => { html.removeAttribute('data-splash'); marcar() }
+    // El contenido aparece cuando la frase ya desapareció
+    const fin = () => { window.clearInterval(borrado); llegar(); html.setAttribute('data-listo', ''); setActivo(false) }
+    // Al llegar el logo, la frase se borra letra por letra (de izquierda a derecha), con un cursor en el frente
+    const borrar = () => {
+      if (!f) return fin()
+      const texto = FRASE_SPLASH
+      let n = 0
+      const oculto = document.createElement('span')
+      oculto.style.visibility = 'hidden'
+      const cursor = document.createElement('span')
+      cursor.className = 'splash__cursor'
+      const resto = document.createElement('span')
+      resto.textContent = texto
+      f.replaceChildren(oculto, cursor, resto)
+      window.setTimeout(() => {
+        borrado = window.setInterval(() => {
+          n += 1
+          oculto.textContent = texto.slice(0, n)
+          resto.textContent = texto.slice(n)
+          if (n >= texto.length) fin()
+        }, Math.max(24, Math.floor(900 / texto.length)))
+      }, 250)
+    }
     if (!l || !f || !b || !destino) { fin(); return }
 
     html.setAttribute('data-splash', '')
@@ -36,7 +60,12 @@ export function Splash() {
     const dy = vh / 2 - (destino.top + destino.height / 2) - vh * 0.03
     const centro = Math.min((vw * 0.62) / destino.width, 7) // tamaño de reposo en el centro
     const enorme = centro * 2.3 // arranque: recortado por los bordes
-    f.style.top = `${vh / 2 - vh * 0.03 + (destino.height * centro) / 2 + 28}px`
+    // Posición final: justo debajo del logo de la cabecera, alineada a la izquierda
+    f.style.left = `${destino.left}px`
+    f.style.top = `${destino.bottom + 8}px`
+    const fr = f.getBoundingClientRect()
+    const fx = vw / 2 - (destino.left + fr.width / 2)
+    const fy = vh / 2 - vh * 0.03 + (destino.height * centro) / 2 + 28 - (destino.bottom + 8)
 
     const ease = 'cubic-bezier(0.22, 1, 0.36, 1)'
     const t = (s: number, x: number, y: number) => `translate(${x}px, ${y}px) scale(${s})`
@@ -52,12 +81,11 @@ export function Splash() {
       ),
       f.animate(
         [
-          { opacity: 0, transform: 'translateY(10px)', offset: 0 },
-          { opacity: 0, transform: 'translateY(10px)', offset: 0.2, easing: ease },
-          { opacity: 1, transform: 'translateY(0)', offset: 0.42 },
-          { opacity: 1, transform: 'translateY(0)', offset: 0.6 },
-          { opacity: 0, transform: 'translateY(-6px)', offset: 0.74 },
-          { opacity: 0, offset: 1 },
+          { opacity: 0, transform: `translate(${fx}px, ${fy + 10}px)`, offset: 0 },
+          { opacity: 0, transform: `translate(${fx}px, ${fy + 10}px)`, offset: 0.2, easing: ease },
+          { opacity: 1, transform: `translate(${fx}px, ${fy}px)`, offset: 0.42, easing: 'linear' },
+          { opacity: 1, transform: `translate(${fx}px, ${fy}px)`, offset: 0.6, easing: ease },
+          { opacity: 1, transform: 'translate(0, 0)', offset: 1 },
         ],
         { duration: DURACION, fill: 'forwards' },
       ),
@@ -66,13 +94,14 @@ export function Splash() {
         { duration: DURACION, fill: 'forwards', easing: 'ease-in-out' },
       ),
     ]
-    animaciones[0].finished.then(fin).catch(() => { /* cancelada */ })
+    animaciones[0].finished.then(() => { llegar(); borrar() }).catch(() => { /* cancelada */ })
 
     // Saltar con clic, toque o cualquier tecla
     const saltar = () => fin()
     document.addEventListener('pointerdown', saltar)
     document.addEventListener('keydown', saltar)
     return () => {
+      window.clearInterval(borrado)
       animaciones.forEach((a) => a.cancel())
       html.removeAttribute('data-splash')
       document.removeEventListener('pointerdown', saltar)
@@ -88,7 +117,7 @@ export function Splash() {
         <Isotipo />
         <span className="cab__nombre t-label">CARLOS CRISPIN</span>
       </div>
-      <p ref={frase} className="splash__frase t-label">{FRASE_SPLASH}</p>
+      <p ref={frase} className="splash__frase t-label"><span>{FRASE_SPLASH}</span></p>
     </div>
   )
 }

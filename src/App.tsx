@@ -9,6 +9,7 @@ import { TemaContext } from './tema-context'
 import { aplicarTema, temaInicial, type Tema } from './theme'
 import Inicio from './pages/Inicio'
 import EnConstruccion from './pages/EnConstruccion'
+import Camino from './pages/Camino'
 import Trabajo from './pages/Trabajo'
 import CasoMapa from './pages/CasoMapa'
 import Tokens from './pages/Tokens'
@@ -50,7 +51,7 @@ export default function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/trabajo" element={<Trabajo />} />
           <Route path="/trabajo/mapa" element={<CasoMapa />} />
-          <Route path="/camino" element={<EnConstruccion titulo="Camino" />} />
+          <Route path="/camino" element={<Camino />} />
           <Route path="/laboratorio" element={<EnConstruccion titulo="Laboratorio" />} />
           <Route path="/por-que" element={<EnConstruccion titulo="Por qué" />} />
           <Route path="/contacto" element={<EnConstruccion titulo="Contacto" />} />
