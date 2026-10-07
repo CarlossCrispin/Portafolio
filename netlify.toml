@@ -1,0 +1,13 @@
+# Netlify: compila con Vite y sirve dist/. La regla final hace que cualquier ruta (p. ej. /trabajo o /camino)
+# cargue la app y la resuelva react-router, en vez de dar 404 al recargar.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
