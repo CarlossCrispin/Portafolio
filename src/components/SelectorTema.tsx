@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { TEMAS, aplicarTema, type Tema } from '../theme'
-import { ETIQUETAS, PALETA, TOKENS_COLOR, mezclar } from '../paleta'
+import { PALETA, TOKENS_COLOR, mezclar } from '../paleta'
+import { ETIQUETAS_TEMA, useIdioma, useUI } from '../i18n'
 
 const SLOT = 48 // alto del botón
 const N = TEMAS.length // 7 modos
@@ -37,6 +38,9 @@ function aplicarMezcla(p: number) {
 }
 
 export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) => void }) {
+  const { idioma } = useIdioma()
+  const ui = useUI()
+  const ETIQUETAS = ETIQUETAS_TEMA[idioma]
   const idx = Math.max(0, (TEMAS as readonly string[]).indexOf(tema))
   const [abierto, setAbierto] = useState(false)
   const [pos, setPos] = useState<number | null>(null) // posición mientras se arrastra
@@ -51,7 +55,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
   // Las paradas y puntos se posicionan dentro de la pista (origen = su borde superior)
   const y = abierto ? actual * PASO - ALTO : 0
   const nombre = ETIQUETAS[TEMAS[idx]]
-  const etiquetaActual = tema === 'contraste-alto' ? 'Alto contraste' : nombre
+  const etiquetaActual = nombre
 
   // Si el tema cambia desde fuera (otro control), se descarta la mezcla libre
   useEffect(() => {
@@ -121,14 +125,14 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
   const slider = abierto
     ? {
         role: 'slider' as const,
-        'aria-label': 'Tema de color',
+        'aria-label': ui.temaColor,
         'aria-orientation': 'vertical' as const,
         'aria-valuemin': 0,
         'aria-valuemax': ULT,
         'aria-valuenow': idx,
-        'aria-valuetext': libre !== null ? `Mezcla cercana a ${etiquetaActual}` : `${etiquetaActual}, ${idx + 1} de ${N}`,
+        'aria-valuetext': libre !== null ? ui.temaMezcla(etiquetaActual) : ui.temaPosicion(etiquetaActual, idx + 1, N),
       }
-    : { role: 'button' as const, 'aria-label': `Elegir tema de color. Actual: ${etiquetaActual}`, 'aria-expanded': false }
+    : { role: 'button' as const, 'aria-label': ui.temaElegir(etiquetaActual), 'aria-expanded': false }
 
   return (
     <div
@@ -152,7 +156,7 @@ export function SelectorTema({ tema, onTema }: { tema: Tema; onTema: (t: Tema) =
             type="button"
             className="sel__parada"
             tabIndex={abierto ? 0 : -1}
-            aria-label={`Tema ${ETIQUETAS[t]}`}
+            aria-label={ui.temaParada(ETIQUETAS[t])}
             aria-pressed={tema === t}
             style={{ top: i * PASO + SLOT / 2 - 22 }}
             onClick={() => ir(i)}

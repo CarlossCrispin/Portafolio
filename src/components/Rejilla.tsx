@@ -1,3 +1,4 @@
+import { useUI } from '../i18n'
 import { useState } from 'react'
 
 const COLUMNAS_MAX = 12 // el CSS oculta las que sobran según breakpoint
@@ -16,12 +17,13 @@ export function Rejilla({ activa }: { activa: boolean }) {
 }
 
 export function BotonRejilla({ activa, onToggle }: { activa: boolean; onToggle: () => void }) {
+  const t = useUI()
   return (
     <button
       type="button"
       className="btn-rejilla reveal rv4"
       aria-pressed={activa}
-      aria-label="Mostrar rejilla"
+      aria-label={t.mostrarRejilla}
       onClick={onToggle}
     >
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">

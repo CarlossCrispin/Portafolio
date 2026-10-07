@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Isotipo } from './Isotipo'
 import { FRASE_SPLASH } from '../content/inicio'
+import { useIdioma } from '../i18n'
 
 /* Splash (~2.5 s, una vez por sesión de navegación): el isotipo + nombre entran enormes (recortados y tenues),
    se reducen hasta el centro, aparece la frase y todo viaja hasta la posición exacta del logo de la cabecera. */
@@ -14,6 +15,8 @@ const marcar = () => { try { sessionStorage.setItem(CLAVE, '1') } catch { /* sin
 const sinMovimiento = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export function Splash() {
+  const { idioma } = useIdioma()
+  const FRASE = FRASE_SPLASH[idioma]
   const [activo, setActivo] = useState(() => !vista() && !sinMovimiento())
   const fondo = useRef<HTMLDivElement>(null)
   const logo = useRef<HTMLDivElement>(null)
@@ -31,7 +34,7 @@ export function Splash() {
     // Al llegar el logo, la frase se borra letra por letra (de izquierda a derecha), con un cursor en el frente
     const borrar = () => {
       if (!f) return fin()
-      const texto = FRASE_SPLASH
+      const texto = FRASE
       let n = 0
       const oculto = document.createElement('span')
       oculto.style.visibility = 'hidden'
@@ -117,7 +120,7 @@ export function Splash() {
         <Isotipo />
         <span className="cab__nombre t-label">CARLOS CRISPIN</span>
       </div>
-      <p ref={frase} className="splash__frase t-label"><span>{FRASE_SPLASH}</span></p>
+      <p ref={frase} className="splash__frase t-label"><span>{FRASE}</span></p>
     </div>
   )
 }

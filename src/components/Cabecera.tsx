@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
 import { Isotipo } from './Isotipo'
-import { SECCIONES } from '../content/secciones'
+import { secciones } from '../content/secciones'
+import { useIdioma, useUI } from '../i18n'
+import { SelectorIdioma } from './SelectorIdioma'
 
 /** Cabecera fija: isotipo + menú (móvil y tablet). En desktop, navegación lateral fija. */
 export function Cabecera() {
+  const { idioma } = useIdioma()
+  const t = useUI()
+  const SECCIONES = secciones(idioma)
   const [abierto, setAbierto] = useState(false)
   const { pathname } = useLocation()
   const boton = useRef<HTMLButtonElement>(null)
@@ -22,34 +27,37 @@ export function Cabecera() {
   return (
     <>
       <header className="cab">
-        <Link to="/" className="cab__logo" aria-label="Carlos Crispín, ir al inicio">
+        <Link to="/" className="cab__logo" aria-label={t.logoAria}>
           <Isotipo />
           <span className="cab__nombre t-label" aria-hidden="true">CARLOS CRISPIN</span>
         </Link>
+        <div className="cab__der reveal rv0">
+          <SelectorIdioma />
         <button
           ref={boton}
           type="button"
-          className="cab__menu reveal rv0"
+          className="cab__menu"
           aria-expanded={abierto}
           aria-controls="menu"
-          aria-label={abierto ? 'Cerrar menú' : 'Abrir menú'}
+          aria-label={abierto ? t.menuCerrar : t.menuAbrir}
           onClick={() => setAbierto((a) => !a)}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
             {abierto ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M5 9h14M5 15h14" />}
           </svg>
         </button>
+        </div>
       </header>
 
       {/* Desktop: navegación lateral */}
-      <nav className="secciones reveal rv0" aria-label="Secciones">
+      <nav className="secciones reveal rv0" aria-label={t.navSecciones}>
         {SECCIONES.map((s) => (
           <NavLink key={s.ruta} to={s.ruta} end={s.ruta === '/'} className="t-nav"><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
         ))}
       </nav>
 
       {/* Móvil y tablet: menú a pantalla completa */}
-      <nav id="menu" className="menu" aria-label="Menú" hidden={!abierto}>
+      <nav id="menu" className="menu" aria-label={t.navMenu} hidden={!abierto}>
         {SECCIONES.map((s, i) => (
           <NavLink key={s.ruta} to={s.ruta} end={s.ruta === '/'} className="menu__enlace" ref={i === 0 ? primero : undefined}><span className="num t-label" aria-hidden="true">{s.n}</span>{s.nombre}</NavLink>
         ))}

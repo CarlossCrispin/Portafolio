@@ -1,12 +1,15 @@
 /* Mapa ficticio en SVG (caso "Mapa de ubicación"). Solo muestra la idea: zona probable, ruta preliminar (hipótesis) y radio de alcance.
    Los colores salen de los tokens del tema. */
+import { useUI } from '../i18n'
+
 export function MapaFicticio() {
+  const t = useUI()
   const calles = [44, 88, 132, 176, 220, 264, 308, 352]
   return (
     <figure
       className="mapa"
       role="img"
-      aria-label="Mapa ficticio, no es un mapa real: un círculo de zona probable dentro de un radio de alcance, con una ruta preliminar marcada como hipótesis que llega al centro."
+      aria-label={t.mapaAria}
     >
       <svg viewBox="0 0 527 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         {calles.map((y) => <line key={y} x1="0" x2="527" y1={y} y2={y} className="mapa__fila" />)}
@@ -18,10 +21,10 @@ export function MapaFicticio() {
         <circle cx="52" cy="335" r="5" className="mapa__punto" />
         <circle cx="306" cy="184" r="5" className="mapa__punto" />
       </svg>
-      <span className="mapa__rotulo" style={{ left: '5%', top: '4%' }} aria-hidden="true">RADIO DE ALCANCE</span>
-      <span className="mapa__rotulo" style={{ left: '61%', top: '18%' }} aria-hidden="true">ZONA PROBABLE</span>
-      <span className="mapa__rotulo" style={{ left: '5%', top: '86%' }} aria-hidden="true">RUTA PRELIMINAR · HIPÓTESIS</span>
-      <span className="mapa__nota" aria-hidden="true">DATOS FICTICIOS · NO ES UN MAPA REAL</span>
+      <span className="mapa__rotulo" style={{ left: '5%', top: '4%' }} aria-hidden="true">{t.mapaRadio}</span>
+      <span className="mapa__rotulo" style={{ left: '61%', top: '18%' }} aria-hidden="true">{t.mapaZona}</span>
+      <span className="mapa__rotulo" style={{ left: '5%', top: '86%' }} aria-hidden="true">{t.mapaRuta}</span>
+      <span className="mapa__nota" aria-hidden="true">{t.mapaNota}</span>
     </figure>
   )
 }

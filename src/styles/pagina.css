@@ -92,3 +92,14 @@
 .tokens { padding-bottom: 80px; max-width: 1100px; }
 /* En desktop el contenido arranca en la columna 5, como el Inicio (la navegación lateral ocupa las 4 primeras) */
 @media (min-width: 1440px) { .tokens { margin-left: calc(4 * ((100vw - 2 * var(--m) - 11 * var(--g)) / 12 + var(--g))); } }
+
+/* Selector de idioma ES / EN (cabecera, a la derecha) */
+.cab__der { display: flex; align-items: center; gap: 4px; }
+.idioma { display: flex; align-items: center; }
+.idioma__op {
+  min-width: 44px; min-height: 44px; padding: 0 6px; border: 0; background: none; cursor: pointer;
+  color: var(--muted); letter-spacing: 0.08em;
+  transition: color var(--dur-rapida) var(--ease);
+}
+.idioma__op:hover { color: var(--fg); }
+.idioma__op[aria-pressed="true"] { color: var(--fg); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1.5px; }

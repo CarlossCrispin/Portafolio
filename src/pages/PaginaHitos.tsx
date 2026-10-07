@@ -1,7 +1,11 @@
 import type { PaginaHitos as Datos } from '../content/camino'
+import { useIdioma, useUI, type Idioma } from '../i18n'
 
 /* Página interior con etiqueta, titular grande, bajada opcional y bloques (fecha/rótulo, título, texto). */
-export default function PaginaHitos({ datos }: { datos: Datos }) {
+export default function PaginaHitos({ datos: porIdioma }: { datos: Record<Idioma, Datos> }) {
+  const { idioma } = useIdioma()
+  const t = useUI()
+  const datos = porIdioma[idioma]
   return (
     <div className="interior">
       <p className="t-label etiqueta reveal rv1">{datos.etiqueta}</p>
@@ -13,7 +17,7 @@ export default function PaginaHitos({ datos }: { datos: Datos }) {
             <p className="t-label etiqueta">{h.fecha}</p>
             <h2 className="t-h2">{h.titulo}</h2>
             <p className={`t-texto${h.pendiente ? ' pendiente' : ''}`}>
-              {h.href ? <a className="camino__enlace" href={h.href} {...(h.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{h.texto}{h.href.startsWith('http') && <span className="solo-lectores"> (se abre en otra pestaña)</span>}</a> : h.texto}
+              {h.href ? <a className="camino__enlace" href={h.href} {...(h.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{h.texto}{h.href.startsWith('http') && <span className="solo-lectores">{t.enNuevaPestana}</span>}</a> : h.texto}
             </p>
           </li>
         ))}

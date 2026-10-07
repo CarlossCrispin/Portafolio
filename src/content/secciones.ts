@@ -1,10 +1,11 @@
-export const SECCIONES = [
-  { n: '01', nombre: 'Inicio', ruta: '/' },
-  { n: '02', nombre: 'Trabajo', ruta: '/trabajo' },
-  { n: '03', nombre: 'Camino', ruta: '/camino' },
-  { n: '04', nombre: 'Laboratorio', ruta: '/laboratorio' },
-  { n: '05', nombre: 'Por qué', ruta: '/por-que' },
-  { n: '06', nombre: 'Contacto', ruta: '/contacto' },
-  // Temporal de la fase 1 (código): vista de tokens, tipografía y rejilla. Se quita antes de publicar.
-  { n: '07', nombre: 'Tokens', ruta: '/tokens' },
-] as const
+import type { Idioma } from '../i18n'
+
+const RUTAS = ['/', '/trabajo', '/camino', '/laboratorio', '/por-que', '/contacto', '/tokens'] as const
+const NOMBRES: Record<Idioma, string[]> = {
+  es: ['Inicio', 'Trabajo', 'Camino', 'Laboratorio', 'Por qué', 'Contacto', 'Tokens'],
+  en: ['Home', 'Work', 'Journey', 'Lab', 'Why', 'Contact', 'Tokens'],
+}
+
+/* La última entrada (Tokens) es temporal de la fase 1: se quita antes de publicar. Las rutas se mantienen en español. */
+export const secciones = (idioma: Idioma) =>
+  RUTAS.map((ruta, i) => ({ n: String(i + 1).padStart(2, '0'), nombre: NOMBRES[idioma][i], ruta }))

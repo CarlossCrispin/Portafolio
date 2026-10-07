@@ -6,6 +6,7 @@ import { Cabecera } from './components/Cabecera'
 import { CursorCirculo } from './components/CursorCirculo'
 import { Splash } from './components/Splash'
 import { TemaContext } from './tema-context'
+import { IdiomaContext, UI, idiomaInicial, type Idioma } from './i18n'
 import { aplicarTema, temaInicial, type Tema } from './theme'
 import Inicio from './pages/Inicio'
 import EnConstruccion from './pages/EnConstruccion'
@@ -16,32 +17,25 @@ import Trabajo from './pages/Trabajo'
 import CasoMapa from './pages/CasoMapa'
 import Tokens from './pages/Tokens'
 
-const TITULOS: Record<string, string> = {
-  '/': 'Carlos Crispín · UX/UI',
-  '/trabajo': 'Trabajo · Carlos Crispín',
-  '/trabajo/mapa': 'Mapa de ubicación · Carlos Crispín',
-  '/camino': 'Camino · Carlos Crispín',
-  '/laboratorio': 'Laboratorio · Carlos Crispín',
-  '/por-que': 'Por qué · Carlos Crispín',
-  '/contacto': 'Contacto · Carlos Crispín',
-  '/tokens': 'Tokens · fase 1',
-}
-
 export default function App() {
   const [tema, setTema] = useState<Tema>(temaInicial)
+  const [idioma, setIdioma] = useState<Idioma>(idiomaInicial)
+  const t = UI[idioma]
   const rej = useRejilla()
   const { pathname } = useLocation()
 
   useEffect(() => aplicarTema(tema), [tema])
+  useEffect(() => { document.documentElement.lang = idioma }, [idioma])
+  useEffect(() => { document.title = t.titulos[pathname] ?? t.titulos['/'] }, [pathname, t])
   useEffect(() => {
-    document.title = TITULOS[pathname] ?? TITULOS['/']
     document.documentElement.dataset.pagina = pathname === '/' ? 'inicio' : 'interior'
     window.scrollTo(0, 0)
   }, [pathname])
 
   return (
+    <IdiomaContext.Provider value={{ idioma, setIdioma }}>
     <TemaContext.Provider value={{ tema, setTema }}>
-      <a className="saltar" href="#contenido">Saltar al contenido</a>
+      <a className="saltar" href="#contenido">{t.saltar}</a>
       <Rejilla activa={rej.activa} />
       <Cabecera />
       <CursorCirculo />
@@ -58,9 +52,10 @@ export default function App() {
           <Route path="/por-que" element={<PaginaHitos datos={POR_QUE} />} />
           <Route path="/contacto" element={<PaginaHitos datos={CONTACTO} />} />
           <Route path="/tokens" element={<Tokens />} />
-          <Route path="*" element={<EnConstruccion titulo="No encontrado" />} />
+          <Route path="*" element={<EnConstruccion />} />
         </Routes>
       </main>
     </TemaContext.Provider>
+    </IdiomaContext.Provider>
   )
 }
