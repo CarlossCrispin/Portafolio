@@ -165,19 +165,7 @@ html[data-sobre-collage] .secciones a:not([aria-current="location"]) { opacity: 
   .t-tab, .tab { font-size: clamp(13px, 0.15vw + 12px, 14px); }
 }
 
-/* Una sola fila de pestañas: si se desborda, la fila se corta limpia (sin blur) a mitad de una pestaña y aparece una flecha › (o ‹) para desplazarse; la marca la pone Pestanas.tsx según el scroll */
-.tabs__flecha {
-  position: absolute; top: 50%; translate: 0 -50%; z-index: 2; width: 28px; height: 28px; padding: 0;
-  display: none; place-items: center; border: 1px solid var(--line); border-radius: 9999px; cursor: pointer;
-  background: var(--bg); color: var(--fg);
-  transition: background-color var(--dur-rapida) var(--ease), border-color var(--dur-rapida) var(--ease);
-}
-.tabs__flecha:hover { background: var(--line); border-color: var(--muted); }
-.tabs__flecha:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
-.tabs__flecha--der { right: 8px; }
-.tabs__flecha--izq { left: 8px; }
-.tabs[data-mas-der] .tabs__flecha--der, .tabs[data-mas-izq] .tabs__flecha--izq { display: grid; }
-.tabs__flecha--izq svg { transform: scaleX(-1); }
-.tabs--intro .tabs__flecha { opacity: 0; }
-
-@media (min-width: 768px) { .tabs__flecha--der { right: 0; } .tabs__flecha--izq { left: 0; } }
+/* Una sola fila de pestañas con "peek out": si no caben, la siguiente pestaña asoma por el borde derecho (la fila se desplaza en horizontal y se ajusta a cada pestaña) */
+.tabs__lista { scroll-snap-type: x proximity; scroll-padding-inline: var(--m); }
+.tabs__lista .tab { scroll-snap-align: start; }
+@media (min-width: 768px) { .tabs__lista { scroll-padding-inline: 0; } }

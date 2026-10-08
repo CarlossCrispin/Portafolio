@@ -40,49 +40,7 @@ export function Pestanas() {
     return () => { mo.disconnect(); window.clearTimeout(tm) }
   }, [intro])
 
-  // Indicador de desborde: marca en .tabs si hay más pestañas a la izquierda o a la derecha
   const cont = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const lista = cont.current?.querySelector<HTMLElement>('.tabs__lista')
-    if (!cont.current || !lista) return
-    const el = cont.current
-    const medir = () => {
-      el.toggleAttribute('data-mas-izq', lista.scrollLeft > 4)
-      el.toggleAttribute('data-mas-der', lista.scrollLeft + lista.clientWidth < lista.scrollWidth - 4)
-    }
-    // Si no caben todas, la fila se recorta a la mitad de una pestaña: siempre asoma un poco de texto a la derecha según el ancho disponible
-    const ajustar = () => {
-      lista.style.maxWidth = ''
-      const disponible = el.clientWidth - 36 // deja sitio a la flecha ›
-      if (lista.scrollWidth <= el.clientWidth + 1) { medir(); return }
-      const tabs = Array.from(lista.querySelectorAll<HTMLElement>('.tab'))
-      let corte = 0
-      for (const tb of tabs) {
-        const c = tb.offsetLeft + tb.offsetWidth * 0.5
-        if (c <= disponible) corte = c
-      }
-      if (corte > 0) lista.style.maxWidth = `${Math.round(corte)}px`
-      medir()
-    }
-    ajustar()
-    lista.addEventListener('scroll', medir, { passive: true })
-    const ro = new ResizeObserver(ajustar)
-    ro.observe(el)
-    document.fonts?.ready.then(ajustar)
-    return () => { lista.removeEventListener('scroll', medir); ro.disconnect(); lista.style.maxWidth = '' }
-  }, [idioma])
-
-  // Flechas ‹ ›: desplazan la fila hasta la siguiente (o anterior) pestaña parcialmente oculta
-  function mover(dir: 1 | -1) {
-    const lista = cont.current?.querySelector<HTMLElement>('.tabs__lista')
-    if (!lista) return
-    const tabs = Array.from(lista.querySelectorAll<HTMLElement>('.tab'))
-    const borde = dir === 1 ? lista.scrollLeft + lista.clientWidth : lista.scrollLeft
-    const destino = dir === 1 ? tabs.find((tb) => tb.offsetLeft + tb.offsetWidth > borde + 2) : [...tabs].reverse().find((tb) => tb.offsetLeft < borde - 2)
-    if (!destino) return
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    lista.scrollTo({ left: dir === 1 ? destino.offsetLeft + destino.offsetWidth - lista.clientWidth : destino.offsetLeft, behavior: reduce ? 'auto' : 'smooth' })
-  }
 
   function ir(i: number) {
     const n = (i + LISTA.length) % LISTA.length
@@ -99,12 +57,6 @@ export function Pestanas() {
   return (
     <>
       <div ref={cont} className={intro ? 'tabs reveal rv1 tabs--intro' : 'tabs reveal rv1'}>
-        <button type="button" className="tabs__flecha tabs__flecha--izq" tabIndex={-1} aria-hidden="true" onClick={() => mover(-1)}>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
-        <button type="button" className="tabs__flecha tabs__flecha--der" tabIndex={-1} aria-hidden="true" onClick={() => mover(1)}>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </button>
         <div className="tabs__lista" role="tablist" aria-label={t.quienEres} onKeyDown={alTeclear}>
           {LISTA.map((x, i) => (
             <button
