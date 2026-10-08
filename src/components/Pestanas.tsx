@@ -40,6 +40,38 @@ export function Pestanas() {
     return () => { mo.disconnect(); window.clearTimeout(tm) }
   }, [intro])
 
+  // Indicador de desborde: marca en .tabs si hay más pestañas a la izquierda o a la derecha
+  const cont = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const lista = cont.current?.querySelector<HTMLElement>('.tabs__lista')
+    if (!cont.current || !lista) return
+    const el = cont.current
+    const medir = () => {
+      el.toggleAttribute('data-mas-izq', lista.scrollLeft > 4)
+      el.toggleAttribute('data-mas-der', lista.scrollLeft + lista.clientWidth < lista.scrollWidth - 4)
+    }
+    // Si no caben todas, la fila se recorta a la mitad de una pestaña: siempre asoma un poco de texto a la derecha según el ancho disponible
+    const ajustar = () => {
+      lista.style.maxWidth = ''
+      const disponible = el.clientWidth
+      if (lista.scrollWidth <= disponible + 1) { medir(); return }
+      const tabs = Array.from(lista.querySelectorAll<HTMLElement>('.tab'))
+      let corte = 0
+      for (const tb of tabs) {
+        const c = tb.offsetLeft + tb.offsetWidth * 0.5
+        if (c <= disponible) corte = c
+      }
+      if (corte > 0) lista.style.maxWidth = `${Math.round(corte)}px`
+      medir()
+    }
+    ajustar()
+    lista.addEventListener('scroll', medir, { passive: true })
+    const ro = new ResizeObserver(ajustar)
+    ro.observe(el)
+    document.fonts?.ready.then(ajustar)
+    return () => { lista.removeEventListener('scroll', medir); ro.disconnect(); lista.style.maxWidth = '' }
+  }, [idioma])
+
   function ir(i: number) {
     const n = (i + LISTA.length) % LISTA.length
     setIntro(false)
@@ -54,7 +86,7 @@ export function Pestanas() {
 
   return (
     <>
-      <div className={intro ? 'tabs reveal rv1 tabs--intro' : 'tabs reveal rv1'}>
+      <div ref={cont} className={intro ? 'tabs reveal rv1 tabs--intro' : 'tabs reveal rv1'}>
         <div className="tabs__lista" role="tablist" aria-label={t.quienEres} onKeyDown={alTeclear}>
           {LISTA.map((x, i) => (
             <button
@@ -67,6 +99,7 @@ export function Pestanas() {
               aria-controls="panel-audiencia"
               tabIndex={i === activa ? 0 : -1}
               className="tab t-tab"
+              data-etiqueta={x.etiqueta}
               onClick={() => { setIntro(false); setActiva(i) }}
             >
               {x.etiqueta}

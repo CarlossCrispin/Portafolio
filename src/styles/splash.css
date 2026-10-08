@@ -42,5 +42,5 @@ html[data-listo] .tab:not(:first-child) { animation: revelar var(--dur-grid) var
 .tab:nth-child(2) { --k: 1; } .tab:nth-child(3) { --k: 2; } .tab:nth-child(4) { --k: 3; } .tab:nth-child(5) { --k: 4; } .tab:nth-child(6) { --k: 5; }
 
 /* Intro de Inicio: todas las pestañas se muestran sin ninguna activa y sin titular; al terminar, se activa la primera y el titular se revela */
-.tabs--intro .tab[aria-selected="true"] { background: transparent; color: var(--muted); }
+.tabs--intro .tab[aria-selected="true"] { color: color-mix(in srgb, var(--fg) 60%, var(--bg)); }
 html[data-listo] .tabs--intro + .titular.reveal { animation: none; clip-path: inset(0 0 100% 0); }

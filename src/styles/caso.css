@@ -1,8 +1,8 @@
 /* Trabajo y caso · medidas de Figma (frames v2 Trabajo y Caso · Mapa de ubicación). */
 
 .interior { display: block; margin-top: 0; }
-@media (min-width: 1440px) {
-  .interior { margin-left: calc(4 * ((100vw - 2 * var(--m) - 11 * var(--g)) / 12 + var(--g))); }
+@media (min-width: 768px) {
+  .interior { margin-left: calc(var(--nav-w) * ((100vw - 2 * var(--m) - (var(--cols) - 1) * var(--g)) / var(--cols) + var(--g))); }
 }
 .etiqueta { color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
 .interior .titulo-sec { margin: 16px 0 0; color: var(--fg); }

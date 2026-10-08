@@ -48,10 +48,8 @@ html[data-caso] { overflow: hidden; }
 .inicio { display: grid; grid-template-columns: repeat(var(--cols), 1fr); column-gap: var(--g); }
 
 .tabs { grid-column: 1 / -1; position: relative; margin-top: 12px; margin-inline: calc(-1 * var(--m)); }
-.tabs__lista { display: flex; gap: 8px; padding-inline: var(--m); overflow-x: auto; scrollbar-width: none; }
+.tabs__lista { display: flex; flex-wrap: nowrap; gap: 8px; padding-inline: var(--m); overflow-x: auto; scrollbar-width: none; padding-block: 4px; margin-block: -4px; }
 .tabs__lista::-webkit-scrollbar { display: none; }
-/* Degradado que sugiere más pestañas a la derecha */
-.tabs::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 72px; pointer-events: none; background: linear-gradient(to right, transparent, var(--bg)); }
 
 .tab {
   flex: none; height: 40px; padding: 10px 16px; border: 0; border-radius: 9999px; cursor: pointer;
@@ -59,7 +57,10 @@ html[data-caso] { overflow: hidden; }
   transition: background-color var(--dur-rapida) var(--ease), color var(--dur-rapida) var(--ease);
 }
 .tab:hover { color: var(--fg); }
-.tab[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+/* Pestañas sin píldora: las inactivas en un tono tenue y la activa en el color de texto pleno (mismo peso, sin negrita) */
+.tab { color: color-mix(in srgb, var(--fg) 60%, var(--bg)); }
+.tab[aria-selected="true"] { color: var(--fg); }
+.tab:hover { color: var(--fg); }
 
 .titular { grid-column: 1 / -1; margin-top: 56px; color: var(--fg); }
 .titular:focus-visible { outline-offset: 8px; }
@@ -78,7 +79,9 @@ html[data-caso] { overflow: hidden; }
   .titular, .titular-pagina { margin-top: 56px; }
 }
 
-@media (min-width: 1440px) {
+/* Tablet y desktop: navegación lateral fija (sin botón de menú). Tablet = 2 columnas (nav en las 2 primeras de 6, contenido desde la 3); desktop = contenido desde la 5 de 12. */
+:root { --col-ini: 3; --nav-w: 2; }
+@media (min-width: 768px) {
   .cab__menu, .menu { display: none !important; }
   .secciones {
     display: flex; flex-direction: column; gap: 6px; position: fixed; z-index: 6;
@@ -87,13 +90,13 @@ html[data-caso] { overflow: hidden; }
   .secciones a { color: var(--muted); text-decoration: none; }
   .secciones a:hover, .secciones a[aria-current="location"] { color: var(--fg); }
 
-  .tabs { grid-column: 5 / -1; margin-top: 8px; margin-inline: 0; }
-  .tabs__lista { gap: 4px; padding-inline: 0; overflow: visible; }
-  .tabs::after { display: none; }
+  .tabs { grid-column: var(--col-ini) / -1; margin-top: 8px; margin-inline: 0; }
+  .tabs__lista { gap: 4px; padding-inline: 0; }
   .tab { padding-inline: 14px; }
-  .titular, .titular-pagina, .texto-pagina { grid-column: 5 / -1; }
+  .titular, .titular-pagina, .texto-pagina { grid-column: var(--col-ini) / -1; }
   .titular, .titular-pagina { margin-top: 112px; }
 }
+@media (min-width: 1440px) { :root { --col-ini: 5; --nav-w: 4; } }
 
 /* Vista de tokens (temporal, fase 1) */
 .tokens { padding-bottom: 80px; max-width: 1100px; }
@@ -138,3 +141,32 @@ html[data-sobre-collage] .cab__menu,
 html[data-sobre-collage] .secciones a,
 html[data-sobre-collage] .secciones .num { color: #fff; }
 html[data-sobre-collage] .secciones a:not([aria-current="location"]) { opacity: 0.6; }
+
+/* Móvil (< 768 px): titular en Regular y los tres botones circulares en su posición de siempre (columna a la izquierda), con tamaño y separación fluidos (mín. táctil 44 px) */
+@media (max-width: 767px) {
+  .titular__principal { font-weight: 400; }
+  /* Aire para que las pestañas no se encimen con el titular ni con los botones fijos */
+  .titular { margin-top: 40px; }
+  .seccion--inicio { padding-bottom: calc(var(--btn) * 3 + var(--btn-sep) * 2 + var(--btn-bajo) + 32px); }
+  .tab { font-size: 16px; line-height: 22px; }
+
+  :root { --btn: clamp(44px, 11.5vw, 48px); --btn-sep: 12px; --btn-bajo: max(16px, env(safe-area-inset-bottom)); }
+  .sel, .idioma, .btn-rejilla { width: var(--btn); height: var(--btn); }
+  .sel__sol { width: var(--btn); height: var(--btn); }
+  .btn-rejilla { bottom: var(--btn-bajo); }
+  .idioma { bottom: calc(var(--btn-bajo) + var(--btn) + var(--btn-sep)); }
+  .sel { bottom: calc(var(--btn-bajo) + 2 * (var(--btn) + var(--btn-sep))); }
+}
+
+/* Tablet y desktop comparten estructura (nav lateral + contenido en 1/3 · 2/3): solo cambia la escala, de forma fluida entre 768 y 1440 px */
+@media (min-width: 768px) {
+  .t-display { font-size: clamp(32px, 3.57vw + 4.6px, 56px); line-height: 1.11; }
+  .t-nav, .secciones a { font-size: clamp(16px, 0.6vw + 11.4px, 20px); line-height: 1.4; }
+  .t-tab, .tab { font-size: clamp(13px, 0.15vw + 12px, 14px); }
+}
+
+/* Una sola fila de pestañas: si se desborda, el borde con más contenido se desvanece (máscara) para indicar que hay más; la marca la pone Pestanas.tsx según el scroll */
+.tabs__lista { --fade: 56px; }
+.tabs[data-mas-der] .tabs__lista { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(to right, #000 calc(100% - var(--fade)), transparent); }
+.tabs[data-mas-izq] .tabs__lista { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(to left, #000 calc(100% - var(--fade)), transparent); }
+.tabs[data-mas-izq][data-mas-der] .tabs__lista { -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); }
