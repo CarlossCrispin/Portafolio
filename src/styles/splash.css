@@ -28,3 +28,19 @@ html[data-listo] .reveal {
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(0 0 0 0); }
 }
+
+/* Secciones de abajo: se descubren al entrar en pantalla (la clase data-visto la pone el observador de App) */
+html[data-listo] .seccion--scroll .reveal { animation: none; clip-path: inset(0 0 100% 0); }
+html[data-listo] .seccion--scroll .reveal[data-visto] {
+  clip-path: none; animation: revelar var(--dur-grid) var(--ease) backwards; animation-delay: calc(var(--i, 0) * 110ms);
+}
+
+/* Pestañas 2 a 6: se revelan con el mismo barrido arriba→abajo del resto del contenido, una tras otra (150 ms), para mostrar que hay más por recorrer.
+   Siguen en el DOM y se pueden enfocar. */
+html:not([data-listo]) .tab:not(:first-child) { clip-path: inset(0 0 100% 0); }
+html[data-listo] .tab:not(:first-child) { animation: revelar var(--dur-grid) var(--ease) backwards; animation-delay: calc(110ms + var(--k, 1) * 150ms); }
+.tab:nth-child(2) { --k: 1; } .tab:nth-child(3) { --k: 2; } .tab:nth-child(4) { --k: 3; } .tab:nth-child(5) { --k: 4; } .tab:nth-child(6) { --k: 5; }
+
+/* Intro de Inicio: todas las pestañas se muestran sin ninguna activa y sin titular; al terminar, se activa la primera y el titular se revela */
+.tabs--intro .tab[aria-selected="true"] { background: transparent; color: var(--muted); }
+html[data-listo] .tabs--intro + .titular.reveal { animation: none; clip-path: inset(0 0 100% 0); }

@@ -1,21 +1,21 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
 import { CASOS } from '../content/casos'
 import { MapaFicticio } from '../components/MapaFicticio'
 import { useIdioma, useUI } from '../i18n'
 
 /* Lista de Trabajos: títulos grandes con la vista previa a la izquierda (desktop).
    Al pasar el cursor o enfocar un título, los demás se atenúan y cambia la vista previa. */
-export default function Trabajo() {
+export default function Trabajo({ onAbrirCaso }: { onAbrirCaso: (slug: string) => void }) {
   const { idioma } = useIdioma()
   const t = useUI()
+  const ui = t
   const lista = CASOS[idioma]
   const [activo, setActivo] = useState(0)
   const c = lista[activo]
   return (
     <div className="interior trabajos">
       <div className="trabajos__cab">
-        <h1 className="t-display reveal rv1">{t.trabajoTitulo}</h1>
+        <h2 className="t-display titulo-sec reveal rv1">{t.trabajoTitulo}</h2>
         <p className="t-lead bajada reveal rv2">{t.trabajoBajada}</p>
       </div>
       <figure className="trabajos__previa reveal rv3" aria-hidden="true">
@@ -31,7 +31,7 @@ export default function Trabajo() {
         {lista.map((k, i) => {
           const cuerpo = (
             <>
-              <h2 className="trabajo__titulo">{k.titulo}</h2>
+              <h3 className="trabajo__titulo">{k.titulo}</h3>
               <span className="t-label trabajo__meta">{k.nivel === 'principal' ? t.principal : t.segunda}</span>
             </>
           )
@@ -39,7 +39,7 @@ export default function Trabajo() {
             <li key={k.slug} className="trabajo" data-listo={k.listo} data-activo={i === activo}
                 onMouseEnter={() => setActivo(i)} onFocus={() => setActivo(i)}>
               {k.listo
-                ? <Link to={`/trabajo/${k.slug}`} className="trabajo__fila">{cuerpo}</Link>
+                ? <a href={`#${k.slug}`} className="trabajo__fila" aria-label={ui.abrirCaso(k.titulo)} onClick={(e) => { e.preventDefault(); onAbrirCaso(k.slug) }}>{cuerpo}</a>
                 : <div className="trabajo__fila">{cuerpo}</div>}
             </li>
           )

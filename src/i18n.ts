@@ -18,12 +18,14 @@ export function useIdioma() {
 
 const ES = {
   saltar: 'Saltar al contenido',
+  desliza: 'Desliza\nabajo',
+  bajarSeccion: 'Bajar a la siguiente sección',
   logoAria: 'Carlos Crispín, ir al inicio',
   menuAbrir: 'Abrir menú',
   menuCerrar: 'Cerrar menú',
   navSecciones: 'Secciones',
   navMenu: 'Menú',
-  idiomaGrupo: 'Idioma',
+  idiomaCambiar: (n: string) => `Cambiar a ${n}`,
   quienEres: '¿Quién eres?',
   mostrarRejilla: 'Mostrar rejilla',
   temaColor: 'Tema de color',
@@ -51,6 +53,10 @@ const ES = {
   mapaAria: 'Mapa ficticio, no es un mapa real: un círculo de zona probable dentro de un radio de alcance, con una ruta preliminar marcada como hipótesis que llega al centro.',
   mapaRadio: 'RADIO DE ALCANCE', mapaZona: 'ZONA PROBABLE', mapaRuta: 'RUTA PRELIMINAR · HIPÓTESIS', mapaNota: 'DATOS FICTICIOS · NO ES UN MAPA REAL',
   proximamente: 'PRÓXIMAMENTE',
+  collageAria: 'Selección visual de imágenes de referencia',
+  collageNota: 'Imágenes de referencia temporales · Pexels. Aquí irán mis trabajos.',
+  cerrarCaso: 'Cerrar caso',
+  abrirCaso: (n: string) => `Abrir caso: ${n}`,
   titulos: {
     '/': 'Carlos Crispín · UX/UI', '/trabajo': 'Trabajo · Carlos Crispín', '/trabajo/mapa': 'Mapa de ubicación · Carlos Crispín',
     '/camino': 'Camino · Carlos Crispín', '/laboratorio': 'Laboratorio · Carlos Crispín', '/por-que': 'Por qué · Carlos Crispín',
@@ -60,12 +66,14 @@ const ES = {
 
 const EN: typeof ES = {
   saltar: 'Skip to content',
+  desliza: 'Scroll\ndown',
+  bajarSeccion: 'Scroll to the next section',
   logoAria: 'Carlos Crispín, go to home',
   menuAbrir: 'Open menu',
   menuCerrar: 'Close menu',
   navSecciones: 'Sections',
   navMenu: 'Menu',
-  idiomaGrupo: 'Language',
+  idiomaCambiar: (n) => `Switch to ${n}`,
   quienEres: 'Who are you?',
   mostrarRejilla: 'Show grid',
   temaColor: 'Color theme',
@@ -93,6 +101,10 @@ const EN: typeof ES = {
   mapaAria: 'Fictitious map, not a real map: a probable-zone circle inside a reach radius, with a preliminary route marked as a hypothesis that reaches the center.',
   mapaRadio: 'REACH RADIUS', mapaZona: 'PROBABLE ZONE', mapaRuta: 'PRELIMINARY ROUTE · HYPOTHESIS', mapaNota: 'FICTITIOUS DATA · NOT A REAL MAP',
   proximamente: 'COMING SOON',
+  collageAria: 'Visual selection of reference images',
+  collageNota: 'Temporary reference images · Pexels. My work will go here.',
+  cerrarCaso: 'Close case',
+  abrirCaso: (n) => `Open case: ${n}`,
   titulos: {
     '/': 'Carlos Crispín · UX/UI', '/trabajo': 'Work · Carlos Crispín', '/trabajo/mapa': 'Location map · Carlos Crispín',
     '/camino': 'Journey · Carlos Crispín', '/laboratorio': 'Lab · Carlos Crispín', '/por-que': 'Why · Carlos Crispín',

@@ -3,7 +3,14 @@
    Tablet 768: cabecera 80, pestañas y=92, titular y=188.
    Desktop 1440: cabecera 88, pestañas y=96 y titular y=248, ambos desde la columna 5; navegación lateral a la izquierda. */
 
-.pagina { position: relative; z-index: 1; min-height: 100svh; padding: var(--cab) var(--m) 120px; }
+.pagina { position: relative; z-index: 1; min-height: 100svh; padding: var(--cab) 0 0; }
+/* Landing de una sola página: cada sección pone su propio margen lateral (el collage va a todo el ancho) */
+.seccion { padding-inline: var(--m); }
+.seccion { min-height: 100svh; box-sizing: border-box; }
+.seccion--inicio { min-height: calc(100svh - var(--cab)); padding-bottom: 96px; }
+.seccion--interior { padding-top: calc(var(--cab) + 40px); padding-bottom: 64px; }
+.contenido-nav { display: contents; }
+html[data-caso] { overflow: hidden; }
 
 .solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
@@ -26,7 +33,7 @@
 .menu { position: fixed; inset: 0; z-index: 5; background: var(--bg); padding: calc(var(--cab) + 40px) var(--m) 120px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .menu[hidden] { display: none; }
 .menu__enlace { font-weight: 600; font-size: 44px; line-height: 50px; letter-spacing: -0.02em; color: var(--muted); text-decoration: none; }
-.menu__enlace[aria-current="page"], .menu__enlace:hover { color: var(--fg); }
+.menu__enlace[aria-current="location"], .menu__enlace:hover { color: var(--fg); }
 
 /* Número del menú (01…) en JetBrains Mono */
 .num { display: inline-block; min-width: 2.4em; font-weight: 400; letter-spacing: 0; vertical-align: top; color: var(--muted); }
@@ -78,7 +85,7 @@
     left: var(--m); top: var(--nav-top, 254px);
   }
   .secciones a { color: var(--muted); text-decoration: none; }
-  .secciones a:hover, .secciones a[aria-current="page"] { color: var(--fg); }
+  .secciones a:hover, .secciones a[aria-current="location"] { color: var(--fg); }
 
   .tabs { grid-column: 5 / -1; margin-top: 8px; margin-inline: 0; }
   .tabs__lista { gap: 4px; padding-inline: 0; overflow: visible; }
@@ -93,22 +100,41 @@
 /* En desktop el contenido arranca en la columna 5, como el Inicio (la navegación lateral ocupa las 4 primeras) */
 @media (min-width: 1440px) { .tokens { margin-left: calc(4 * ((100vw - 2 * var(--m) - 11 * var(--g)) / 12 + var(--g))); } }
 
-/* Selector de idioma ES / EN (cabecera, a la derecha) */
-.cab__der { display: flex; align-items: center; gap: 4px; }
-.idioma { display: flex; align-items: center; }
-.idioma__op {
-  min-width: 44px; min-height: 44px; padding: 0 6px; border: 0; background: none; cursor: pointer;
-  color: var(--muted); letter-spacing: 0.08em;
-  transition: color var(--dur-rapida) var(--ease);
-}
-.idioma__op:hover { color: var(--fg); }
-.idioma__op[aria-pressed="true"] { color: var(--fg); text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1.5px; }
-
-/* Inicio · jerarquía del texto de cada pestaña: titular Medium + párrafo de apoyo Regular en gris */
+/* Inicio · todo el texto de cada pestaña va en un solo bloque, en Medium */
 .titular__principal { margin: 0; font-weight: 500; }
-.titular__apoyo {
-  margin: 24px 0 0; max-width: 34em; color: var(--muted); font-weight: 400;
-  font-size: 18px; line-height: 26px; letter-spacing: -0.005em;
+
+/* Indicador scroll down (Inicio) · réplica del de fabiopereira.world: flecha dibujada a mano + "SCROLL DOWN" en dos líneas, abajo a la derecha */
+.seccion--inicio { position: relative; }
+.scroll-down {
+  position: absolute; right: var(--m); bottom: 32px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--fg); text-decoration: none; text-align: center; visibility: hidden;
 }
-@media (min-width: 768px) { .titular__apoyo { margin-top: 32px; font-size: 22px; line-height: 32px; } }
-@media (min-width: 1440px) { .titular__apoyo { font-size: 24px; line-height: 34px; } }
+.scroll-down[data-ver] { visibility: visible; }
+.scroll-down__flecha { width: 20px; height: auto; display: block; }
+.scroll-down__flecha path { fill: none; }
+/* Trazo base tenue (se dibuja al aparecer) + luz que recorre la flecha de arriba hacia abajo en bucle */
+.scroll-down__base { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0.3; }
+.scroll-down__luz { stroke-dasharray: 0.22 1.3; stroke-dashoffset: 0.22; opacity: 0; }
+.scroll-down__texto { font-size: 11px; line-height: 13px; text-transform: uppercase; white-space: pre-line; opacity: 0; transition: opacity var(--dur-media) var(--ease) 0.6s; }
+.scroll-down[data-ver] .scroll-down__texto { opacity: 1; }
+.scroll-down[data-ver] .scroll-down__base { animation: scroll-down-dibuja 1.2s var(--ease) forwards; }
+.scroll-down[data-ver] .scroll-down__luz { animation: scroll-down-luz 2s var(--ease) 1.2s infinite; }
+@keyframes scroll-down-dibuja { to { stroke-dashoffset: 0; } }
+@keyframes scroll-down-luz {
+  0%   { stroke-dashoffset: 0.22; opacity: 1; }
+  80%  { stroke-dashoffset: -1; opacity: 1; }
+  100% { stroke-dashoffset: -1; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-down[data-ver] .scroll-down__base { animation: none; stroke-dashoffset: 0; opacity: 1; }
+  .scroll-down[data-ver] .scroll-down__luz { animation: none; opacity: 0; }
+}
+
+/* Sobre el collage: logo y navegación en blend 'difference' (igual que el cursor) → siempre contrastan, sobre fotos claras u oscuras */
+html[data-sobre-collage] .cab,
+html[data-sobre-collage] .secciones { mix-blend-mode: difference; }
+html[data-sobre-collage] .cab__logo,
+html[data-sobre-collage] .cab__menu,
+html[data-sobre-collage] .secciones a,
+html[data-sobre-collage] .secciones .num { color: #fff; }
+html[data-sobre-collage] .secciones a:not([aria-current="location"]) { opacity: 0.6; }

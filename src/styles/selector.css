@@ -1,7 +1,7 @@
 /* Selector de tema · pista vertical con el sol como pulgar (referencia: video + Figma 21:196).
    Cerrado: solo el sol, sobre el botón de rejilla. Abierto: pista hacia arriba con 5 paradas, Claro arriba → Oscuro abajo. */
 
-.sel { position: fixed; left: 16px; bottom: 76px; width: 48px; height: 48px; z-index: 10; }
+.sel { position: fixed; left: 16px; bottom: 136px; width: 48px; height: 48px; z-index: 10; }
 
 .sel__pista {
   position: absolute; left: 0; right: 0; bottom: 0;
@@ -36,3 +36,16 @@
 
 /* Mientras se arrastra, el color cambia sin retraso */
 html[data-arrastrando] *, html[data-arrastrando] *::before, html[data-arrastrando] *::after { transition: none !important; }
+
+/* Idioma · un solo botón circular de 48 px con el mismo estilo que el botón de rejilla y el sol del tema.
+   Muestra el idioma activo (ES / EN) y al pulsarlo cambia al otro. Va entre la rejilla y el tema. */
+.idioma {
+  position: fixed; left: 16px; bottom: 76px; z-index: 10; width: 48px; height: 48px; padding: 0; border-radius: 9999px;
+  display: grid; place-items: center; cursor: pointer; background: var(--bg); color: var(--fg); border: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 12px; line-height: 14px; letter-spacing: 0.04em; font-weight: 500;
+  transition: transform var(--dur-rapida) var(--ease), background-color var(--dur-rapida) var(--ease),
+              color var(--dur-rapida) var(--ease), border-color var(--dur-rapida) var(--ease);
+}
+.idioma:hover { transform: scale(1.08); background: var(--line); border-color: var(--muted); }
+.idioma:active { transform: scale(0.95); }
+.idioma:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }

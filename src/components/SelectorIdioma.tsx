@@ -1,29 +1,22 @@
 import { useIdioma, useUI, type Idioma } from '../i18n'
 
-const OPCIONES: { id: Idioma; texto: string; nombre: string }[] = [
-  { id: 'es', texto: 'ES', nombre: 'Español' },
-  { id: 'en', texto: 'EN', nombre: 'English' },
-]
+const NOMBRES: Record<Idioma, string> = { es: 'Español', en: 'English' }
 
-/** Botón de idioma ES / EN (grupo de dos botones; el activo queda marcado con aria-pressed). */
+/** Idioma: un solo botón circular que muestra el idioma activo (ES o EN) y al pulsarlo cambia al otro.
+ *  Va entre el botón de rejilla y el selector de tema, con el mismo estilo que ambos. */
 export function SelectorIdioma() {
   const { idioma, setIdioma } = useIdioma()
   const t = useUI()
+  const otro: Idioma = idioma === 'es' ? 'en' : 'es'
   return (
-    <div className="idioma" role="group" aria-label={t.idiomaGrupo}>
-      {OPCIONES.map((o) => (
-        <button
-          key={o.id}
-          type="button"
-          lang={o.id}
-          className="idioma__op t-label"
-          aria-pressed={o.id === idioma}
-          aria-label={o.nombre}
-          onClick={() => setIdioma(o.id)}
-        >
-          {o.texto}
-        </button>
-      ))}
-    </div>
+    <button
+      type="button"
+      className="idioma reveal rv4"
+      lang={otro}
+      aria-label={t.idiomaCambiar(NOMBRES[otro])}
+      onClick={() => setIdioma(otro)}
+    >
+      <span lang={idioma} aria-hidden="true">{idioma.toUpperCase()}</span>
+    </button>
   )
 }

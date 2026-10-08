@@ -1,4 +1,3 @@
-import { Link } from 'react-router'
 import { MAPA } from '../content/casos'
 import { MapaFicticio } from '../components/MapaFicticio'
 import { useIdioma, useUI } from '../i18n'
@@ -9,16 +8,16 @@ const Flecha = ({ atras }: { atras?: boolean }) => (
   </svg>
 )
 
-export default function CasoMapa() {
+export default function CasoMapa({ onCerrar }: { onCerrar: () => void }) {
   const { idioma } = useIdioma()
   const t = useUI()
   const M = MAPA[idioma]
   return (
     <article className="interior caso">
-      <Link to="/trabajo" className="volver reveal rv0"><Flecha atras /> {t.casos}</Link>
+      <button type="button" className="volver reveal rv0" onClick={onCerrar}><Flecha atras /> {t.casos}</button>
       <header className="reveal rv1">
         <p className="t-label etiqueta">{t.casoPrincipal}</p>
-        <h1 className="t-display">{M.titulo}</h1>
+        <h2 id="caso-titulo" className="t-display titulo-sec">{M.titulo}</h2>
         <p className="t-label rotulo">{t.recreado}</p>
       </header>
 
@@ -48,13 +47,13 @@ export default function CasoMapa() {
       <div className="secciones-caso reveal rv3">
         {M.secciones.map((s) => (
           <section key={s.titulo} className="seccion-caso">
-            <h2 className="t-h2">{s.titulo}</h2>
+            <h3 className="t-h2">{s.titulo}</h3>
             <p className={s.pendiente ? 't-texto pendiente' : 't-texto'}>{s.texto}</p>
           </section>
         ))}
       </div>
 
-      <Link to="/trabajo" className="boton-linea reveal rv4">{t.verCasos} <Flecha /></Link>
+      <button type="button" className="boton-linea reveal rv4" onClick={onCerrar}>{t.verCasos} <Flecha /></button>
     </article>
   )
 }

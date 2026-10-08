@@ -12,6 +12,9 @@ function Texto({ partes }: { partes: Parte[] }) {
   )
 }
 
+// Tiempo desde que el contenido está listo hasta activar la primera pestaña (barrido de todas las pestañas + pausa)
+const PAUSA_INTRO_MS = 2000
+
 /** Pestañas de audiencia (patrón tablist) + titular que cambia con la pestaña activa. */
 export function Pestanas() {
   const { idioma } = useIdioma()
@@ -23,8 +26,23 @@ export function Pestanas() {
   const primera = useRef(true)
   useEffect(() => { primera.current = false }, [])
 
+  // Intro: primero se muestran todas las pestañas sin ninguna activa y sin titular; después se activa la primera y entra el contenido.
+  // Se salta con movimiento reducido o en cuanto la persona interactúa.
+  const [intro, setIntro] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  useEffect(() => {
+    if (!intro) return
+    const html = document.documentElement
+    let tm = 0
+    const armar = () => { tm = window.setTimeout(() => setIntro(false), PAUSA_INTRO_MS) }
+    if (html.hasAttribute('data-listo')) { armar(); return () => window.clearTimeout(tm) }
+    const mo = new MutationObserver(() => { if (html.hasAttribute('data-listo')) { mo.disconnect(); armar() } })
+    mo.observe(html, { attributes: true, attributeFilter: ['data-listo'] })
+    return () => { mo.disconnect(); window.clearTimeout(tm) }
+  }, [intro])
+
   function ir(i: number) {
     const n = (i + LISTA.length) % LISTA.length
+    setIntro(false)
     setActiva(n)
     refs.current[n]?.focus()
   }
@@ -36,7 +54,7 @@ export function Pestanas() {
 
   return (
     <>
-      <div className="tabs reveal rv1">
+      <div className={intro ? 'tabs reveal rv1 tabs--intro' : 'tabs reveal rv1'}>
         <div className="tabs__lista" role="tablist" aria-label={t.quienEres} onKeyDown={alTeclear}>
           {LISTA.map((x, i) => (
             <button
@@ -49,7 +67,7 @@ export function Pestanas() {
               aria-controls="panel-audiencia"
               tabIndex={i === activa ? 0 : -1}
               className="tab t-tab"
-              onClick={() => setActiva(i)}
+              onClick={() => { setIntro(false); setActiva(i) }}
             >
               {x.etiqueta}
             </button>
@@ -57,11 +75,7 @@ export function Pestanas() {
         </div>
       </div>
       <div className="titular reveal rv2" role="tabpanel" id="panel-audiencia" aria-labelledby={`tab-${a.id}`} aria-live="polite" tabIndex={0}>
-        {/* Jerarquía: la primera frase es el titular; el resto, un párrafo de apoyo más pequeño y ligero */}
-        <div key={a.id} className={primera.current ? undefined : 'titular--entra'}>
-          <p className="t-display titular__principal"><Texto partes={a.texto.slice(0, 1)} /></p>
-          {a.texto.length > 1 && <p className="titular__apoyo"><Texto partes={a.texto.slice(1)} /></p>}
-        </div>
+        <p key={a.id} className={primera.current ? 't-display titular__principal' : 't-display titular__principal titular--entra'}><Texto partes={a.texto} /></p>
       </div>
     </>
   )
