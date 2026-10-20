@@ -14,6 +14,7 @@ import { aplicarTema, temaInicial, type Tema } from './theme'
 import Inicio from './pages/Inicio'
 import Camino from './pages/Camino'
 import PaginaHitos from './pages/PaginaHitos'
+import { RetratoContacto } from './components/RetratoContacto'
 import { LABORATORIO, POR_QUE, CONTACTO } from './content/secundarias'
 import Trabajo from './pages/Trabajo'
 
@@ -76,7 +77,7 @@ export default function App() {
           <section id="camino" className="seccion seccion--interior seccion--scroll" data-seccion="camino"><Camino /></section>
           <section id="laboratorio" className="seccion seccion--interior seccion--scroll" data-seccion="laboratorio"><PaginaHitos datos={LABORATORIO} /></section>
           <section id="por-que" className="seccion seccion--interior seccion--scroll" data-seccion="por-que"><PaginaHitos datos={POR_QUE} /></section>
-          <section id="contacto" className="seccion seccion--interior seccion--scroll" data-seccion="contacto"><PaginaHitos datos={CONTACTO} /></section>
+          <section id="contacto" className="seccion seccion--interior seccion--scroll" data-seccion="contacto"><div className="contacto-par"><PaginaHitos datos={CONTACTO} /><RetratoContacto /></div></section>
         </main>
         {caso && <CasoPanel slug={caso} onCerrar={cerrarCaso} />}
       </TemaContext.Provider>

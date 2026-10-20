@@ -123,19 +123,21 @@
 
 /* Collage · muro de imágenes a todo el ancho (referencia: billysweeney.com), recortado abajo con degradado */
 .collage { padding-inline: 0; position: relative; min-height: 0; }
-.collage__muro {
-  position: relative; column-count: 3; column-gap: 0; height: 100svh; overflow: hidden; background: var(--bg);
-}
-@media (min-width: 768px) { .collage__muro { column-count: 5; } }
-@media (min-width: 1440px) { .collage__muro { column-count: 8; } }
-.collage__muro::after {
-  content: ''; position: absolute; inset: auto 0 0 0; height: 160px; pointer-events: none;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-}
-.collage__item { position: relative; display: block; margin: 0; break-inside: avoid; aspect-ratio: var(--forma, 1 / 1); background: var(--line); overflow: hidden; }
+.collage__muro { position: relative; display: flex; min-height: 100svh; background: var(--bg); }
+.collage__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.collage__item { position: relative; display: block; margin: 0; aspect-ratio: var(--forma, 1 / 1); background: var(--line); overflow: hidden; }
 .collage__item img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
   transition: transform 600ms var(--ease);
 }
 .collage__item:hover img { transform: scale(1.04); }
+/* Velo del color de fondo: 40 % en reposo, se retira al pasar el cursor */
+.collage__item::after { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: .4; pointer-events: none; transition: opacity var(--dur-media, .6s) var(--ease, ease); }
+.collage__item:hover::after { opacity: 0; }
+@media (hover: none) { .collage__item::after { opacity: .15; } }
 .collage__nota { position: absolute; left: var(--m); right: var(--m); bottom: 16px; margin: 0; z-index: 1; }
+
+/* Contacto · retrato debajo del texto, cargado a la derecha */
+.contacto-par { display: block; }
+.retrato { margin: 40px 0 0 auto; width: min(100%, 420px); aspect-ratio: 4 / 3; overflow: hidden; background: var(--line); }
+.retrato img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
